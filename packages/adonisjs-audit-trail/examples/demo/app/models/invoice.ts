@@ -1,6 +1,6 @@
 import { compose } from '@adonisjs/core/helpers'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
-import { Auditable } from '@rikology/adonisjs-audit-trail/auditable'
+import { Auditable } from '@byteshiftid/adonisjs-audit-trail/auditable'
 import { DateTime } from 'luxon'
 
 export default class Invoice extends compose(BaseModel, Auditable) {

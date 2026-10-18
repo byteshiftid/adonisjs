@@ -12,7 +12,7 @@ export { tenantAwareSessionGuard, tenantAwareAccessTokensGuard, tenantAwareBasic
  *
  * @example
  * ```ts
- * import { tenantGuards } from '@rikology/adonisjs-tenant/guards'
+ * import { tenantGuards } from '@byteshiftid/adonisjs-tenant/guards'
  *
  * const authConfig = defineTenantAuthConfig({
  *   default: 'web',

@@ -38,7 +38,7 @@ Exit codes:
 A pure hash chain detects tampering but not whole-suffix deletion. Enable anchoring to catch truncation:
 
 ```ts
-import { defineConfig, fileAppendPublisher, stores } from '@rikology/adonisjs-audit-trail'
+import { defineConfig, fileAppendPublisher, stores } from '@byteshiftid/adonisjs-audit-trail'
 
 const publishAnchor = await fileAppendPublisher('storage/audit-anchors.ndjson')
 

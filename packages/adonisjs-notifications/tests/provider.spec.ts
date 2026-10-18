@@ -1,7 +1,7 @@
 import { test } from '@japa/runner'
 import { join } from 'node:path'
 import { mkdir, writeFile, rm } from 'node:fs/promises'
-import { AppFactory } from '@adonisjs/application/factories'
+import { AppFactory } from '@adonisjs/core/factories/app'
 import { NotificationManager } from '../src/notification_manager.ts'
 import NotificationProvider from '../providers/notification_provider.ts'
 

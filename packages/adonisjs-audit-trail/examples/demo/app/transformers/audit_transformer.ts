@@ -1,5 +1,5 @@
 import { BaseTransformer } from '@adonisjs/core/transformers'
-import type Audit from '@rikology/adonisjs-audit-trail/models/audit'
+import type Audit from '@byteshiftid/adonisjs-audit-trail/models/audit'
 
 export default class AuditTransformer extends BaseTransformer<Audit> {
   toObject() {

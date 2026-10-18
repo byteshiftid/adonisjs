@@ -1,4 +1,4 @@
-# @rikology/adonisjs-tenant
+# @byteshiftid/adonisjs-tenant
 
 Tenant identity propagation, tenant-aware authentication helpers, and opt-in Lucid query scoping for AdonisJS v7.
 
@@ -7,9 +7,9 @@ Tenant identity propagation, tenant-aware authentication helpers, and opt-in Luc
 This package extends AdonisJS Auth automatically when its provider boots. Configure Auth before configuring tenancy:
 
 ```sh
-npm install @adonisjs/auth @rikology/adonisjs-tenant
+npm install @adonisjs/auth @byteshiftid/adonisjs-tenant
 node ace configure @adonisjs/auth --guard=access_tokens
-node ace configure @rikology/adonisjs-tenant
+node ace configure @byteshiftid/adonisjs-tenant
 ```
 
 The tenancy configure command requires `config/auth.ts`. It registers the tenancy provider, the `tenant` named middleware, a `config/tenancy.ts` stub, and tenant migrations. When creating the membership pivot, it asks independently whether the tenant and user identifiers are integers, big integers, UUIDs, or strings; integer remains the default. For non-interactive configuration, set `ADONISJS_TENANT_TENANT_ID_TYPE` and `ADONISJS_TENANT_USER_ID_TYPE` to `integer`, `bigint`, `uuid`, or `string`. Re-running configure detects the package's existing migration filenames and skips generating duplicates. The command fails before making changes when Auth is not configured.
@@ -19,7 +19,7 @@ The tenancy configure command requires `config/auth.ts`. It registers the tenanc
 Configure a default named resolver in `config/tenancy.ts`:
 
 ```ts
-import { defineTenancyConfig } from '@rikology/adonisjs-tenant'
+import { defineTenancyConfig } from '@byteshiftid/adonisjs-tenant'
 import Tenant from '#models/tenant'
 
 export default defineTenancyConfig({
@@ -56,7 +56,7 @@ The selected `default` must name an entry in `tenants`; the provider validates t
 
 ### Tenant resolvers
 
-Import built-in resolvers from `@rikology/adonisjs-tenant/resolvers`.
+Import built-in resolvers from `@byteshiftid/adonisjs-tenant/resolvers`.
 
 ```ts
 import {
@@ -64,7 +64,7 @@ import {
   JwtResolver,
   PathResolver,
   SubdomainResolver,
-} from '@rikology/adonisjs-tenant/resolvers'
+} from '@byteshiftid/adonisjs-tenant/resolvers'
 ```
 
 - `SubdomainResolver` extracts a subdomain and resolves it through `lookup` or its configured `tenants` map.
@@ -96,7 +96,7 @@ The provider automatically extends AuthManager during boot; do not call `extendA
 Configure tenant-aware guard factories from the package's guards subpath:
 
 ```ts
-import { defineTenantAuthConfig, tenantGuards } from '@rikology/adonisjs-tenant/guards'
+import { defineTenantAuthConfig, tenantGuards } from '@byteshiftid/adonisjs-tenant/guards'
 import { tokensUserProvider } from '@adonisjs/auth/access_tokens'
 import User from '#models/user'
 
@@ -120,7 +120,7 @@ Use `TenantScope` only on models whose backing table has a real, non-null `tenan
 
 ```ts
 import { column, BaseModel } from '@adonisjs/lucid/orm'
-import { TenantScope } from '@rikology/adonisjs-tenant/mixins'
+import { TenantScope } from '@byteshiftid/adonisjs-tenant/mixins'
 
 export default class Post extends TenantScope(BaseModel) {
   @column({ isPrimary: true })
@@ -147,7 +147,7 @@ this.schema.alterTable('posts', (table) => {
 Set a context explicitly outside the HTTP middleware:
 
 ```ts
-import { TenantService } from '@rikology/adonisjs-tenant'
+import { TenantService } from '@byteshiftid/adonisjs-tenant'
 
 await TenantService.run(tenant, async () => {
   // TenantScope queries in this callback use this tenant identity.
@@ -161,7 +161,7 @@ For users stored per tenant, replace `withAuthFinder` with `withTenantAuthFinder
 ```ts
 import hash from '@adonisjs/core/services/hash'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
-import { withTenantAuthFinder } from '@rikology/adonisjs-tenant/mixins'
+import { withTenantAuthFinder } from '@byteshiftid/adonisjs-tenant/mixins'
 
 export default class User extends withTenantAuthFinder(() => hash.use())(BaseModel) {
   @column({ isPrimary: true })
@@ -194,7 +194,7 @@ Membership mode leaves the global user model unscoped, joins the pivot only for 
 When session or basic authentication validates membership separately, configure `TenantUserProvider` with the same pivot keys:
 
 ```ts
-import { TenantUserProvider } from '@rikology/adonisjs-tenant/user_providers'
+import { TenantUserProvider } from '@byteshiftid/adonisjs-tenant/user_providers'
 
 const tenantUsers = new TenantUserProvider(User, {
   pivotTable: 'tenant_user',
@@ -211,7 +211,7 @@ For Klinika-style PostgreSQL isolation, define forced RLS policies in your appli
 
 ```ts
 import db from '@adonisjs/lucid/services/db'
-import { TenantDatabaseExecutor } from '@rikology/adonisjs-tenant/database'
+import { TenantDatabaseExecutor } from '@byteshiftid/adonisjs-tenant/database'
 
 const tenantDatabase = new TenantDatabaseExecutor(db)
 
@@ -225,15 +225,15 @@ await tenantDatabase.run(async (tenant, trx) => {
 
 ## API reference
 
-| Import                                     | Public API                                                                                                                                         |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@rikology/adonisjs-tenant`                | `TenantService`, `getTenantContext()`, `getTenantContextOrFail()`, `runWithTenant()`, `defineTenancyConfig()`, `TenantMiddleware`, `TenantContext` |
-| `@rikology/adonisjs-tenant/database`       | `TenantDatabaseExecutor`                                                                                                                           |
-| `@rikology/adonisjs-tenant/guards`         | `defineTenantAuthConfig()`, `tenantGuards`                                                                                                         |
-| `@rikology/adonisjs-tenant/mixins`         | `TenantScope`, `withTenantAuthFinder`                                                                                                              |
-| `@rikology/adonisjs-tenant/resolvers`      | `SubdomainResolver`, `HeaderResolver`, `JwtResolver`, `PathResolver`                                                                               |
-| `@rikology/adonisjs-tenant/user_providers` | `TenantUserProvider`                                                                                                                               |
-| `@rikology/adonisjs-tenant/extensions`     | `TenantAuthenticator`, `extendAuthenticator()` for advanced integrations; the installed provider applies the extension automatically.              |
+| Import                                        | Public API                                                                                                                                         |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@byteshiftid/adonisjs-tenant`                | `TenantService`, `getTenantContext()`, `getTenantContextOrFail()`, `runWithTenant()`, `defineTenancyConfig()`, `TenantMiddleware`, `TenantContext` |
+| `@byteshiftid/adonisjs-tenant/database`       | `TenantDatabaseExecutor`                                                                                                                           |
+| `@byteshiftid/adonisjs-tenant/guards`         | `defineTenantAuthConfig()`, `tenantGuards`                                                                                                         |
+| `@byteshiftid/adonisjs-tenant/mixins`         | `TenantScope`, `withTenantAuthFinder`                                                                                                              |
+| `@byteshiftid/adonisjs-tenant/resolvers`      | `SubdomainResolver`, `HeaderResolver`, `JwtResolver`, `PathResolver`                                                                               |
+| `@byteshiftid/adonisjs-tenant/user_providers` | `TenantUserProvider`                                                                                                                               |
+| `@byteshiftid/adonisjs-tenant/extensions`     | `TenantAuthenticator`, `extendAuthenticator()` for advanced integrations; the installed provider applies the extension automatically.              |
 
 ## Limitations and security model
 

@@ -27,7 +27,7 @@ export default await Env.create(new URL('../', import.meta.url), {
 
   /*
   |----------------------------------------------------------
-  | Variables for @rikology/adonisjs-audit-trail
+  | Variables for @byteshiftid/adonisjs-audit-trail
   |----------------------------------------------------------
   */
   AUDIT_REDACTION_SALT: Env.schema.string.optional(),

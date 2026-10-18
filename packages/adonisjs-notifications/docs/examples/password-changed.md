@@ -6,7 +6,7 @@ A security notification sent via mail when a user changes their password.
 
 ```ts
 // app/notifications/password_changed.ts
-import { Notification, MailMessage } from '@rikology/adonisjs-notifications'
+import { Notification, MailMessage } from '@byteshiftid/adonisjs-notifications'
 
 export default class PasswordChanged extends Notification {
   public priority = 'critical'
@@ -37,7 +37,7 @@ export default class PasswordChanged extends Notification {
 
 ```ts
 // app/controllers/passwords_controller.ts
-import notifications from '@rikology/adonisjs-notifications/services/main'
+import notifications from '@byteshiftid/adonisjs-notifications/services/main'
 import PasswordChanged from '#notifications/password_changed'
 
 export default class PasswordsController {

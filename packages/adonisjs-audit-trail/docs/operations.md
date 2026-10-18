@@ -1,6 +1,6 @@
 # Operations Guide
 
-This guide covers production operations for `@rikology/adonisjs-audit-trail`.
+This guide covers production operations for `@byteshiftid/adonisjs-audit-trail`.
 
 ## PostgreSQL monthly partitioning
 
@@ -76,7 +76,7 @@ Optionally enable the DB-level immutability trigger via `configure` (guards agai
 Route audit I/O to a dedicated connection (or even a separate database/replica) in `config/audit.ts`:
 
 ```ts
-import { defineConfig, stores } from '@rikology/adonisjs-audit-trail'
+import { defineConfig, stores } from '@byteshiftid/adonisjs-audit-trail'
 
 export default defineConfig({
   default: 'lucid',

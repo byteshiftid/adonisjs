@@ -1,6 +1,6 @@
 # Audit trail demo
 
-A minimal AdonisJS v7 API wired with `@rikology/adonisjs-audit-trail`. It demonstrates the `Auditable` mixin, automatic create/update capture, the request-context middleware, an explicit domain event, field redaction (`iban`), and tamper-evidence verification.
+A minimal AdonisJS v7 API wired with `@byteshiftid/adonisjs-audit-trail`. It demonstrates the `Auditable` mixin, automatic create/update capture, the request-context middleware, an explicit domain event, field redaction (`iban`), and tamper-evidence verification.
 
 ## Prerequisites
 

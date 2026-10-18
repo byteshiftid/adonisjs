@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import type { ApplicationService } from '@adonisjs/core/types'
-import type { NextFn } from '@adonisjs/http-server/types'
+import type { NextFn } from '@adonisjs/core/types/http'
 import { auditContext } from '../audit_context.js'
 import { AuditConfigurationError } from '../core/errors.js'
 import type { AuditActor } from '../types.js'

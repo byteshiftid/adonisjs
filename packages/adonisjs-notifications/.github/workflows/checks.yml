@@ -65,5 +65,5 @@ jobs:
           mkdir ../consumer
           cd ../consumer
           npm init --yes
-          npm install ../adonisjs-notifications/rikology-adonisjs-notifications-*.tgz @adonisjs/core@^7.0.0 @adonisjs/mail@^10.0.0 @adonisjs/queue@^0.6.2
-          npm ls @rikology/adonisjs-notifications @adonisjs/core @adonisjs/mail @adonisjs/queue
+          npm install ../adonisjs-notifications/byteshiftid-adonisjs-notifications-*.tgz @adonisjs/core@^7.0.0 @adonisjs/mail@^10.0.0 @adonisjs/queue@^0.6.2
+          npm ls @byteshiftid/adonisjs-notifications @adonisjs/core @adonisjs/mail @adonisjs/queue

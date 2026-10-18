@@ -83,8 +83,7 @@ export function tenantAwareAccessTokensGuard<RealUser>(config: {
     | AccessTokensUserProviderContract<RealUser>
     | ConfigProvider<AccessTokensUserProviderContract<RealUser>>
   tenantTokenProvider:
-    | TenantBoundAccessTokenVerifier
-    | ConfigProvider<TenantBoundAccessTokenVerifier>
+    TenantBoundAccessTokenVerifier | ConfigProvider<TenantBoundAccessTokenVerifier>
 }): GuardConfigProvider<(ctx: HttpContext) => TenantAwareAccessTokensGuard<RealUser>> {
   return {
     resolver: async (_name: string, app: ApplicationService) => {

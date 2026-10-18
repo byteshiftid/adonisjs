@@ -1,5 +1,5 @@
 import { test } from '@japa/runner'
-import type { CommandMetaData } from '@adonisjs/ace/types'
+import type { CommandMetaData } from '@adonisjs/core/types/ace'
 import { getMetaData, getCommand } from '../../commands/main.ts'
 
 test.group('Commands loader', () => {

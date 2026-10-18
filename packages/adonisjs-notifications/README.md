@@ -1,4 +1,4 @@
-# @rikology/adonisjs-notifications
+# @byteshiftid/adonisjs-notifications
 
 > Multi-channel notifications with Laravel-inspired ergonomics for AdonisJS v7
 
@@ -7,13 +7,13 @@ Send notifications through multiple channels using a clean, expressive syntax. Q
 ## Installation
 
 ```bash
-npm i @rikology/adonisjs-notifications
+npm i @byteshiftid/adonisjs-notifications
 ```
 
 Then configure the package:
 
 ```bash
-node ace configure @rikology/adonisjs-notifications
+node ace configure @byteshiftid/adonisjs-notifications
 ```
 
 This sets up the provider, copies the config file, registers the CLI commands, and optionally publishes the required migrations.
@@ -25,7 +25,7 @@ Send your first notification in five steps:
 **1. Install the package**
 
 ```bash
-npm i @rikology/adonisjs-notifications
+npm i @byteshiftid/adonisjs-notifications
 ```
 
 **2. Create a notification**
@@ -37,7 +37,7 @@ node ace make:notification OrderShipped
 **3. Define the notification**
 
 ```ts
-import { Notification, MailMessage } from '@rikology/adonisjs-notifications'
+import { Notification, MailMessage } from '@byteshiftid/adonisjs-notifications'
 import Order from '#models/order'
 
 export default class OrderShippedNotification extends Notification {
@@ -63,7 +63,7 @@ export default class OrderShippedNotification extends Notification {
 **4. Add the mixin to your User model**
 
 ```ts
-import { withNotifications } from '@rikology/adonisjs-notifications'
+import { withNotifications } from '@byteshiftid/adonisjs-notifications'
 
 export default class User extends compose(BaseModel, withNotifications()) {
   // ...
@@ -73,7 +73,7 @@ export default class User extends compose(BaseModel, withNotifications()) {
 **5. Send the notification**
 
 ```ts
-import notifications from '@rikology/adonisjs-notifications/services/main'
+import notifications from '@byteshiftid/adonisjs-notifications/services/main'
 import OrderShippedNotification from '#notifications/order_shipped_notification'
 
 await notifications.send(user, new OrderShippedNotification(order))

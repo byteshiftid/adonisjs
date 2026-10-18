@@ -8,7 +8,7 @@ Render a paginated audit trail in an AdonisJS + Inertia + React/Vue app using th
 
 ```ts
 import { BaseTransformer } from '@adonisjs/core/http'
-import Audit from '@rikology/adonisjs-audit-trail/models/audit'
+import Audit from '@byteshiftid/adonisjs-audit-trail/models/audit'
 
 export default class AuditTransformer extends BaseTransformer {
   static model = Audit
@@ -43,7 +43,7 @@ export default class AuditTransformer extends BaseTransformer {
 
 ```ts
 import type { HttpContext } from '@adonisjs/core/http'
-import Audit from '@rikology/adonisjs-audit-trail/models/audit'
+import Audit from '@byteshiftid/adonisjs-audit-trail/models/audit'
 import AuditTransformer from '#transformers/audit_transformer'
 
 export default class AuditsController {

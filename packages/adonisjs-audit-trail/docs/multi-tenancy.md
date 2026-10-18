@@ -25,7 +25,7 @@ export default defineConfig({
 The middleware captures the tenant for every HTTP request. For jobs or CLI commands, use `audit.withinContext`:
 
 ```ts
-import audit from '@rikology/adonisjs-audit-trail/services/main'
+import audit from '@byteshiftid/adonisjs-audit-trail/services/main'
 
 await audit.withinContext({ tenantId: 'acme' }, async () => {
   await invoice.save()
@@ -35,7 +35,7 @@ await audit.withinContext({ tenantId: 'acme' }, async () => {
 ## Tenant-scoped queries
 
 ```ts
-import Audit from '@rikology/adonisjs-audit-trail/models/audit'
+import Audit from '@byteshiftid/adonisjs-audit-trail/models/audit'
 
 const trail = await Audit.inTenant('acme').orderBy('seq', 'desc').paginate(1, 20)
 ```

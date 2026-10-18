@@ -1,7 +1,7 @@
 {{{
   exports({ to: app.configPath('tenancy.ts') })
 }}}
-import { defineTenancyConfig } from '@rikology/adonisjs-tenant'
+import { defineTenancyConfig } from '@byteshiftid/adonisjs-tenant'
 
 const tenancyConfig = defineTenancyConfig({
   /**

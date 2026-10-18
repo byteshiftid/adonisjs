@@ -1,5 +1,5 @@
 import { writeFile } from 'node:fs/promises'
-import { FsLoader } from '@adonisjs/ace'
+import { FsLoader } from '@adonisjs/core/ace'
 
 /**
  * Generate commands/commands.json from the compiled command files.

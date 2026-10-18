@@ -8,7 +8,7 @@
 */
 
 import { middleware } from '#start/kernel'
-import audit from '@rikology/adonisjs-audit-trail/services/main'
+import audit from '@byteshiftid/adonisjs-audit-trail/services/main'
 import router from '@adonisjs/core/services/router'
 import { controllers } from '#generated/controllers'
 

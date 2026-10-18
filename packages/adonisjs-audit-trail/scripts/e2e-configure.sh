@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-# End-to-end consumer harness for @rikology/adonisjs-audit-trail.
+# End-to-end consumer harness for @byteshiftid/adonisjs-audit-trail.
 #
 # It verifies the package consumers receive from npm: build once, pack once,
 # configure a fresh AdonisJS application using explicit named connections, then
 # compile, migrate, and boot the provider's commands. SQLite is always local.
 # PostgreSQL and MySQL are opt-in through explicit connection URLs.
 
-readonly PACKAGE_NAME='@rikology/adonisjs-audit-trail'
+readonly PACKAGE_NAME='@byteshiftid/adonisjs-audit-trail'
 readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 readonly PACKAGE_DIR="$(cd -- "$SCRIPT_DIR/.." && pwd -P)"
 
@@ -217,15 +217,15 @@ write_public_import_fixture() {
   local consumer_dir="$1"
 
   cat > "$consumer_dir/app/audit-trail-consumer.ts" <<'EOF'
-import { defineConfig, stores, type HttpStoreOptions } from '@rikology/adonisjs-audit-trail'
+import { defineConfig, stores, type HttpStoreOptions } from '@byteshiftid/adonisjs-audit-trail'
 import type {
   AuditOutboxConfig,
   AuditQuery,
   AuditReadOptions,
   AuditableModelInstance,
-} from '@rikology/adonisjs-audit-trail'
-import { Auditable } from '@rikology/adonisjs-audit-trail/auditable'
-import Audit from '@rikology/adonisjs-audit-trail/models/audit'
+} from '@byteshiftid/adonisjs-audit-trail'
+import { Auditable } from '@byteshiftid/adonisjs-audit-trail/auditable'
+import Audit from '@byteshiftid/adonisjs-audit-trail/models/audit'
 
 export const config = defineConfig({
   default: 'lucid',

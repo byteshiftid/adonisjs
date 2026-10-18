@@ -1,5 +1,5 @@
 import { test } from '@japa/runner'
-import { HttpContextFactory, RequestFactory } from '@adonisjs/http-server/factories'
+import { HttpContextFactory, RequestFactory } from '@adonisjs/core/factories/http'
 import type { HttpContext } from '@adonisjs/core/http'
 import { NotificationManager } from '../../src/notification_manager.ts'
 import { MemoryNotificationRepository } from '../../src/repositories/memory_notification_repository.ts'

@@ -4,10 +4,10 @@ The package ships with an optional metrics dashboard for inspecting notification
 
 ## Enabling
 
-When you run `node ace configure @rikology/adonisjs-notifications`, answer **yes** to the dashboard prompt. Then add the routes to `start/routes.ts`:
+When you run `node ace configure @byteshiftid/adonisjs-notifications`, answer **yes** to the dashboard prompt. Then add the routes to `start/routes.ts`:
 
 ```ts
-import { notificationDashboardRoutes } from '@rikology/adonisjs-notifications/ui/dashboard'
+import { notificationDashboardRoutes } from '@byteshiftid/adonisjs-notifications/ui/dashboard'
 import router from '@adonisjs/core/services/router'
 
 router
@@ -112,7 +112,7 @@ curl '/notifications/dashboard/metrics.json?channel=mail&status=failed&from=2026
 Import `getMetrics()` directly to build your own endpoints or admin panels:
 
 ```ts
-import notifications from '@rikology/adonisjs-notifications/services/main'
+import notifications from '@byteshiftid/adonisjs-notifications/services/main'
 
 const metrics = await notifications.getMetrics({
   notifiableType: 'User',

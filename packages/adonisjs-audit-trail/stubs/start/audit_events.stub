@@ -3,7 +3,7 @@
     to: app.startPath('audit_events.ts')
   })
 }}}
-import '@rikology/adonisjs-audit-trail/types'
+import '@byteshiftid/adonisjs-audit-trail/types'
 
 /**
  * Declare your typed domain audit event names here. Once registered, the
@@ -11,7 +11,7 @@ import '@rikology/adonisjs-audit-trail/types'
  *
  * Example:
  *
- * declare module '@rikology/adonisjs-audit-trail/types' {
+ * declare module '@byteshiftid/adonisjs-audit-trail/types' {
  *   interface AuditEvents {
  *     'invoice.approved': true
  *     'invoice.exported': true

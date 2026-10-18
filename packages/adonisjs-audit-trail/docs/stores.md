@@ -91,7 +91,7 @@ import type {
   PruneReport,
   ResolvedRetentionPolicy,
   VerifyReport,
-} from '@rikology/adonisjs-audit-trail'
+} from '@byteshiftid/adonisjs-audit-trail'
 import type { ApplicationService } from '@adonisjs/core/types'
 
 export async function myStore(_app: ApplicationService): Promise<AuditStoreContract> {

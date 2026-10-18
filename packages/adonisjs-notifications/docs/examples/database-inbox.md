@@ -8,7 +8,7 @@ A full database notification inbox implementation.
 // app/models/user.ts
 import { compose } from '@adonisjs/core/helpers'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
-import { withNotifications } from '@rikology/adonisjs-notifications/mixins'
+import { withNotifications } from '@byteshiftid/adonisjs-notifications/mixins'
 
 export default class User extends compose(BaseModel, withNotifications()) {
   @column({ isPrimary: true })
@@ -26,7 +26,7 @@ export default class User extends compose(BaseModel, withNotifications()) {
 
 ```ts
 // app/notifications/mention.ts
-import { Notification } from '@rikology/adonisjs-notifications'
+import { Notification } from '@byteshiftid/adonisjs-notifications'
 
 export default class Mention extends Notification {
   constructor(

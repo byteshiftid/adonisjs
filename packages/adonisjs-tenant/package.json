@@ -1,5 +1,5 @@
 {
-  "name": "@rikology/adonisjs-tenant",
+  "name": "@byteshiftid/adonisjs-tenant",
   "description": "Multitenancy library for AdonisJS v7 — tenant-aware auth + ORM scoping",
   "version": "1.0.2",
   "engines": {
@@ -66,57 +66,55 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "quick:test": "node --import=@poppinss/ts-exec --enable-source-maps bin/test.ts",
-    "pretest": "npm run lint",
-    "test": "c8 npm run quick:test",
-    "precompile": "npm run lint",
+    "pretest": "pnpm run lint",
+    "test": "c8 pnpm run quick:test",
+    "precompile": "pnpm run lint",
     "compile": "tsdown && tsc --emitDeclarationOnly --declaration",
-    "postcompile": "npm run copy:templates",
-    "build": "npm run compile",
-    "verify:package": "npm run build && node scripts/verify-packed-artifact.mjs",
-    "release": "release-it",
-    "version": "npm run build",
-    "prepublishOnly": "npm run build"
+    "postcompile": "pnpm run copy:templates",
+    "build": "pnpm run compile",
+    "verify:package": "pnpm run build && node scripts/verify-packed-artifact.mjs",
+    "prepublishOnly": "pnpm run build"
   },
   "keywords": [
+    "adonisjs-package",
     "adonisjs",
     "multitenancy",
     "tenant",
     "multi-tenant",
     "saas"
   ],
-  "author": "Riko Riswandha Fahmi Prasetyo <rikorisw@gmail.com>",
+  "author": "Riko Riswandha Fahmi Prasetyo <rikorisw@gmail.com> (https://byteshift.id)",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rikoriswandha/adonisjs-tenant.git"
+    "url": "git+https://github.com/byteshiftid/adonisjs.git",
+    "directory": "packages/adonisjs-tenant"
   },
   "bugs": {
-    "url": "https://github.com/rikoriswandha/adonisjs-tenant/issues"
+    "url": "https://github.com/byteshiftid/adonisjs/issues"
   },
-  "homepage": "https://github.com/rikoriswandha/adonisjs-tenant#readme",
+  "homepage": "https://github.com/byteshiftid/adonisjs/tree/main/packages/adonisjs-tenant#readme",
   "devDependencies": {
-    "@adonisjs/assembler": "^8.0.0",
-    "@adonisjs/auth": "^10.0.0",
-    "@adonisjs/core": "^7.0.1",
-    "@adonisjs/eslint-config": "^3.0.0",
-    "@adonisjs/lucid": "^22.0.0",
-    "@adonisjs/prettier-config": "^1.5.0",
-    "@adonisjs/tsconfig": "^2.0.0",
-    "@japa/assert": "^4.2.0",
-    "@japa/runner": "^5.3.0",
-    "@poppinss/ts-exec": "^1.4.4",
-    "@release-it/conventional-changelog": "^12.0.0",
-    "@types/node": "^25.3.5",
-    "c8": "^11.0.0",
-    "copyfiles": "^2.4.1",
-    "cross-env": "^10.1.0",
-    "eslint": "^10.0.3",
-    "luxon": "^3.7.2",
-    "prettier": "^3.8.1",
-    "release-it": "^21.0.2",
+    "@adonisjs/assembler": "catalog:",
+    "@adonisjs/auth": "catalog:",
+    "@adonisjs/core": "catalog:",
+    "@adonisjs/eslint-config": "catalog:",
+    "@adonisjs/lucid": "catalog:",
+    "@adonisjs/prettier-config": "catalog:",
+    "@adonisjs/tsconfig": "catalog:",
+    "@japa/assert": "catalog:",
+    "@japa/runner": "catalog:",
+    "@poppinss/ts-exec": "catalog:",
+    "@types/node": "catalog:",
+    "c8": "catalog:",
+    "copyfiles": "catalog:",
+    "cross-env": "catalog:",
+    "eslint": "catalog:",
+    "luxon": "catalog:",
+    "prettier": "catalog:",
     "sqlite3": "^6.0.1",
-    "tsdown": "^0.21.0",
-    "typescript": "^5.9.3"
+    "tsdown": "catalog:",
+    "typescript": "catalog:"
   },
   "peerDependencies": {
     "@adonisjs/assembler": "^8.0.0",
@@ -131,7 +129,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "provenance": false
+    "provenance": true
   },
   "tsdown": {
     "entry": {
@@ -156,30 +154,6 @@
     "treeshake": false,
     "sourcemaps": false,
     "target": "esnext"
-  },
-  "release-it": {
-    "git": {
-      "requireCleanWorkingDir": true,
-      "requireUpstream": true,
-      "commitMessage": "chore(release): ${version}",
-      "tagAnnotation": "v${version}",
-      "push": true,
-      "tagName": "v${version}"
-    },
-    "github": {
-      "release": true
-    },
-    "npm": {
-      "publish": true,
-      "skipChecks": true
-    },
-    "plugins": {
-      "@release-it/conventional-changelog": {
-        "preset": {
-          "name": "angular"
-        }
-      }
-    }
   },
   "c8": {
     "reporter": [

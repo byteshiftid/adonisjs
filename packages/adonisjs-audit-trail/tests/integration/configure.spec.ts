@@ -1,4 +1,4 @@
-import { AppFactory } from '@adonisjs/application/factories'
+import { AppFactory } from '@adonisjs/core/factories/app'
 import { test } from '@japa/runner'
 import { configure } from '../../configure.js'
 import { stubsRoot } from '../../stubs/main.js'
@@ -96,24 +96,24 @@ test.group('Configure hook', () => {
 
     assert.deepInclude(calls.updateRcFile, {
       type: 'provider',
-      path: '@rikology/adonisjs-audit-trail/audit_provider',
+      path: '@byteshiftid/adonisjs-audit-trail/audit_provider',
     })
     assert.deepInclude(calls.updateRcFile, {
       type: 'command',
-      path: '@rikology/adonisjs-audit-trail/commands',
+      path: '@byteshiftid/adonisjs-audit-trail/commands',
     })
 
     assert.deepEqual(calls.registerMiddleware, [
       {
         stack: 'router',
-        middleware: [{ path: '@rikology/adonisjs-audit-trail/audit_context_middleware' }],
+        middleware: [{ path: '@byteshiftid/adonisjs-audit-trail/audit_context_middleware' }],
       },
     ])
 
     assert.deepEqual(calls.defineEnvValidations, [
       {
         variables: { AUDIT_REDACTION_SALT: 'Env.schema.string.optional()' },
-        leadingComment: 'Variables for @rikology/adonisjs-audit-trail',
+        leadingComment: 'Variables for @byteshiftid/adonisjs-audit-trail',
       },
     ])
 

@@ -131,7 +131,7 @@ async function validatePrerequisites(command: Configure) {
 
   if (!hasAuthConfig) {
     throw new Error(
-      'Cannot configure @rikology/adonisjs-tenant without @adonisjs/auth. Install and configure @adonisjs/auth first (node ace configure @adonisjs/auth).'
+      'Cannot configure @byteshiftid/adonisjs-tenant without @adonisjs/auth. Install and configure @adonisjs/auth first (node ace configure @adonisjs/auth).'
     )
   }
 
@@ -153,13 +153,13 @@ export async function configure(command: Configure) {
   const appRoot = fileURLToPath(command.app.appRoot)
   const codemods = await command.createCodemods()
   await codemods.updateRcFile((rcFile) => {
-    rcFile.addProvider('@rikology/adonisjs-tenant/providers/tenancy_provider')
+    rcFile.addProvider('@byteshiftid/adonisjs-tenant/providers/tenancy_provider')
   })
 
   await codemods.registerMiddleware('named', [
     {
       name: 'tenant',
-      path: '@rikology/adonisjs-tenant/middleware',
+      path: '@byteshiftid/adonisjs-tenant/middleware',
     },
   ])
 
@@ -196,7 +196,7 @@ export async function configure(command: Configure) {
     })
   }
 
-  command.logger.success('@rikology/adonisjs-tenant configured successfully!')
+  command.logger.success('@byteshiftid/adonisjs-tenant configured successfully!')
   command.logger.info('')
   command.logger.info('Next steps:')
   command.logger.info('  1. Update config/tenancy.ts with your tenant resolver configuration')

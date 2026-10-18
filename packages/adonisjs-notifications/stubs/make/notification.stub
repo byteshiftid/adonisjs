@@ -3,9 +3,9 @@
     to: app.makePath('app/notifications', entity.path, entity.name + '.ts')
   })
 }}}
-import { Notification } from '@rikology/adonisjs-notifications'
+import { Notification } from '@byteshiftid/adonisjs-notifications'
 {{#if mail}}
-import { MailMessage } from '@rikology/adonisjs-notifications'
+import { MailMessage } from '@byteshiftid/adonisjs-notifications'
 {{/if}}
 
 export default class {{ entity.name }} extends Notification {

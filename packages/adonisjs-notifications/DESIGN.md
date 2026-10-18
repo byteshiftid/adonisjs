@@ -14,21 +14,21 @@ OKLCH is used throughout so chroma naturally falls as surfaces approach white or
 
 ### Palette
 
-| Token | Light | Dark | Usage |
-|-------|-------|------|-------|
-| `--bg` | `oklch(98.2% 0.004 80)` | `oklch(17% 0.01 80)` | Page background |
-| `--surface` | `oklch(100% 0.002 80)` | `oklch(23% 0.012 80)` | Cards, panels, inputs |
-| `--surface-2` | `oklch(96.5% 0.006 80)` | `oklch(28% 0.014 80)` | Hover, secondary rows |
-| `--surface-3` | `oklch(92.5% 0.008 80)` | `oklch(34% 0.016 80)` | Code blocks, tertiary surfaces |
-| `--text` | `oklch(24% 0.012 80)` | `oklch(93% 0.01 80)` | Primary text |
-| `--muted` | `oklch(52% 0.01 80)` | `oklch(66% 0.012 80)` | Secondary text, placeholders |
-| `--border` | `oklch(88% 0.012 80)` | `oklch(38% 0.014 80)` | Dividers, input borders |
-| `--border-subtle` | `oklch(93% 0.01 80)` | `oklch(32% 0.012 80)` | Row separators, faint rules |
-| `--accent` | `oklch(55% 0.13 55)` | `oklch(65% 0.14 60)` | Primary actions, active nav, focus rings |
-| `--accent-contrast` | `oklch(22% 0.02 55)` | `oklch(22% 0.02 55)` | Text on accent |
-| `--danger` | `oklch(52% 0.18 25)` | `oklch(60% 0.16 30)` | Failed / danger |
-| `--warning` | `oklch(70% 0.13 85)` | `oklch(72% 0.12 85)` | Pending / warning |
-| `--info` | `oklch(60% 0.12 250)` | `oklch(65% 0.11 250)` | Skipped / info, unread dot |
+| Token               | Light                   | Dark                  | Usage                                    |
+| ------------------- | ----------------------- | --------------------- | ---------------------------------------- |
+| `--bg`              | `oklch(98.2% 0.004 80)` | `oklch(17% 0.01 80)`  | Page background                          |
+| `--surface`         | `oklch(100% 0.002 80)`  | `oklch(23% 0.012 80)` | Cards, panels, inputs                    |
+| `--surface-2`       | `oklch(96.5% 0.006 80)` | `oklch(28% 0.014 80)` | Hover, secondary rows                    |
+| `--surface-3`       | `oklch(92.5% 0.008 80)` | `oklch(34% 0.016 80)` | Code blocks, tertiary surfaces           |
+| `--text`            | `oklch(24% 0.012 80)`   | `oklch(93% 0.01 80)`  | Primary text                             |
+| `--muted`           | `oklch(52% 0.01 80)`    | `oklch(66% 0.012 80)` | Secondary text, placeholders             |
+| `--border`          | `oklch(88% 0.012 80)`   | `oklch(38% 0.014 80)` | Dividers, input borders                  |
+| `--border-subtle`   | `oklch(93% 0.01 80)`    | `oklch(32% 0.012 80)` | Row separators, faint rules              |
+| `--accent`          | `oklch(55% 0.13 55)`    | `oklch(65% 0.14 60)`  | Primary actions, active nav, focus rings |
+| `--accent-contrast` | `oklch(22% 0.02 55)`    | `oklch(22% 0.02 55)`  | Text on accent                           |
+| `--danger`          | `oklch(52% 0.18 25)`    | `oklch(60% 0.16 30)`  | Failed / danger                          |
+| `--warning`         | `oklch(70% 0.13 85)`    | `oklch(72% 0.12 85)`  | Pending / warning                        |
+| `--info`            | `oklch(60% 0.12 250)`   | `oklch(65% 0.11 250)` | Skipped / info, unread dot               |
 
 Pure `#000` and `#fff` are avoided. The light background is a warm off-white; the dark background is a deep warm charcoal, not black.
 

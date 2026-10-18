@@ -1,7 +1,7 @@
-# `@rikology/adonisjs-audit-trail`
+# `@byteshiftid/adonisjs-audit-trail`
 
-[![checks](https://github.com/rikoriswandha/adonisjs-audit-trail/actions/workflows/checks.yml/badge.svg)](https://github.com/rikoriswandha/adonisjs-audit-trail/actions/workflows/checks.yml)
-[![npm version](https://img.shields.io/npm/v/@rikology/adonisjs-audit-trail)](https://www.npmjs.com/package/@rikology/adonisjs-audit-trail)
+[![checks](https://github.com/byteshiftid/adonisjs/actions/workflows/ci.yml/badge.svg)](https://github.com/byteshiftid/adonisjs/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/@byteshiftid/adonisjs-audit-trail)](https://www.npmjs.com/package/@byteshiftid/adonisjs-audit-trail)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
 
 Production-grade, tamper-evident audit trail for [AdonisJS v7](https://adonisjs.com).
@@ -10,7 +10,7 @@ Capture who changed what, when, and from where — automatically for Lucid model
 
 ## Why this package?
 
-Most AdonisJS auditing solutions stop at "who changed this row". `@rikology/adonisjs-audit-trail` is designed for environments where **the log is evidence**:
+Most AdonisJS auditing solutions stop at "who changed this row". `@byteshiftid/adonisjs-audit-trail` is designed for environments where **the log is evidence**:
 
 - **Tamper-evident by default** — every record is linked into a per-stream SHA-256 hash chain; modification breaks every successor.
 - **Guarantee-aware delivery** — best-effort delivery is asynchronous; request-coupled waits for a flush; transactional outbox durably records source intent in the caller-owned business transaction before asynchronous delivery.
@@ -41,15 +41,15 @@ Most AdonisJS auditing solutions stop at "who changed this row". `@rikology/adon
 ### 1. Install
 
 ```bash
-node ace add @rikology/adonisjs-audit-trail
+node ace add @byteshiftid/adonisjs-audit-trail
 ```
 
 Or with your package manager of choice:
 
 ```bash
-npm install @rikology/adonisjs-audit-trail
-pnpm add @rikology/adonisjs-audit-trail
-yarn add @rikology/adonisjs-audit-trail
+npm install @byteshiftid/adonisjs-audit-trail
+pnpm add @byteshiftid/adonisjs-audit-trail
+yarn add @byteshiftid/adonisjs-audit-trail
 ```
 
 The `configure` command publishes `config/audit.ts`, migrations, the audit transformer, and registers the provider, commands, and middleware.
@@ -57,7 +57,7 @@ The `configure` command publishes `config/audit.ts`, migrations, the audit trans
 For CI or other non-interactive environments, pass flags to skip the prompts:
 
 ```bash
-node ace configure @rikology/adonisjs-audit-trail --outbox --no-multi-tenant --immutability
+node ace configure @byteshiftid/adonisjs-audit-trail --outbox --no-multi-tenant --immutability
 ```
 
 ### 2. Run migrations
@@ -71,7 +71,7 @@ node ace migration:run
 ```ts
 import { compose } from '@adonisjs/core/helpers'
 import { BaseModel } from '@adonisjs/lucid/orm'
-import { Auditable } from '@rikology/adonisjs-audit-trail/auditable'
+import { Auditable } from '@byteshiftid/adonisjs-audit-trail/auditable'
 
 export default class Invoice extends compose(BaseModel, Auditable) {
   static auditConfig = {
@@ -88,7 +88,7 @@ Every `create`, `update`, `delete`, and restore now produces an immutable audit 
 ### 4. Log explicit domain events
 
 ```ts
-import audit from '@rikology/adonisjs-audit-trail/services/main'
+import audit from '@byteshiftid/adonisjs-audit-trail/services/main'
 
 await audit.log('invoice.approved').on(invoice).withMeta({ level: 2 }).commit()
 ```
@@ -111,7 +111,7 @@ This writes the durable source intent in `trx`; the outbox drainer still deliver
 ### 5. Query the trail
 
 ```ts
-import Audit from '@rikology/adonisjs-audit-trail/models/audit'
+import Audit from '@byteshiftid/adonisjs-audit-trail/models/audit'
 
 const trail = await Audit.query()
   .apply((scopes) => scopes.forModel(invoice))

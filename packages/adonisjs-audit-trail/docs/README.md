@@ -1,6 +1,6 @@
 # Documentation
 
-Welcome to the `@rikology/adonisjs-audit-trail` documentation.
+Welcome to the `@byteshiftid/adonisjs-audit-trail` documentation.
 
 ## Getting started
 

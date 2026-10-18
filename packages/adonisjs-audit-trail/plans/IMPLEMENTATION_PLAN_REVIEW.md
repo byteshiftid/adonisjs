@@ -1,13 +1,12 @@
 # Implementation Plan Review
 
 Review target: `docs/IMPLEMENTATION_PLAN.md`  
-Project reviewed: `@rikology/adonisjs-audit-trail` current workspace  
+Project reviewed: `@byteshiftid/adonisjs-audit-trail` current workspace  
 Review date: 2026-06-13
 
 ## Executive verdict
 
 Original review finding: the project was far beyond scaffold state and implemented most planned package surface, but several 1.0 acceptance criteria were only partially implemented or partially verified.
-
 
 ## Fix status
 
@@ -25,42 +24,42 @@ All findings in this review have been addressed in the current workspace:
 
 Post-fix local verification:
 
-| Command | Result |
-|---|---:|
-| `npm run lint` | Pass |
-| `npm run typecheck` | Pass |
-| `SKIP_DOCKER_TESTS=1 npm run quick:test -- --files=tests/unit/assembler.spec.ts --files=tests/unit/audit_service.spec.ts --files=tests/integration/stores.spec.ts --files=tests/integration/transactions.spec.ts --files=tests/integration/commands.spec.ts` | Pass, 43 tests |
-| `SKIP_DOCKER_TESTS=1 npm test` | Pass, 131 tests |
-| `npm run compile` | Pass |
-| `npm pack --dry-run` | Pass |
+| Command                                                                                                                                                                                                                                                      |          Result |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------: |
+| `npm run lint`                                                                                                                                                                                                                                               |            Pass |
+| `npm run typecheck`                                                                                                                                                                                                                                          |            Pass |
+| `SKIP_DOCKER_TESTS=1 npm run quick:test -- --files=tests/unit/assembler.spec.ts --files=tests/unit/audit_service.spec.ts --files=tests/integration/stores.spec.ts --files=tests/integration/transactions.spec.ts --files=tests/integration/commands.spec.ts` |  Pass, 43 tests |
+| `SKIP_DOCKER_TESTS=1 npm test`                                                                                                                                                                                                                               | Pass, 131 tests |
+| `npm run compile`                                                                                                                                                                                                                                            |            Pass |
+| `npm pack --dry-run`                                                                                                                                                                                                                                         |            Pass |
 
 ## Verification run during review
 
 Commands run from repo root:
 
-| Command | Result | Notes |
-|---|---:|---|
-| `npm run typecheck` | Pass | TypeScript diagnostics clean. |
-| `npm run lint` | Pass | ESLint completed without reported issues. |
-| `SKIP_DOCKER_TESTS=1 npm run quick:test` | Pass | 118 tests passed; Docker-backed tests intentionally skipped. |
-| `npm run compile` | Pass | `tsdown` built configured entrypoints; stubs and `commands.json` copied in `postcompile`. |
-| `SKIP_DOCKER_TESTS=1 npm test` | Pass | 118 tests passed; coverage: all files 89.55%, `src/core` 91.85%. |
-| `npm pack --dry-run` | Pass | Tarball contains `build/**`, stubs, package metadata, README, and license; no tests/bin entries observed. |
+| Command                                  | Result | Notes                                                                                                     |
+| ---------------------------------------- | -----: | --------------------------------------------------------------------------------------------------------- |
+| `npm run typecheck`                      |   Pass | TypeScript diagnostics clean.                                                                             |
+| `npm run lint`                           |   Pass | ESLint completed without reported issues.                                                                 |
+| `SKIP_DOCKER_TESTS=1 npm run quick:test` |   Pass | 118 tests passed; Docker-backed tests intentionally skipped.                                              |
+| `npm run compile`                        |   Pass | `tsdown` built configured entrypoints; stubs and `commands.json` copied in `postcompile`.                 |
+| `SKIP_DOCKER_TESTS=1 npm test`           |   Pass | 118 tests passed; coverage: all files 89.55%, `src/core` 91.85%.                                          |
+| `npm pack --dry-run`                     |   Pass | Tarball contains `build/**`, stubs, package metadata, README, and license; no tests/bin entries observed. |
 
 Not verified locally: Postgres/MySQL Testcontainers matrix and the 5k+5k concurrency proof, because the local test run explicitly used `SKIP_DOCKER_TESTS=1`.
 
 ## Milestone status
 
-| Milestone | Status | Evidence | Remaining gap |
-|---|---|---|---|
-| M0 — Scaffold & Toolchain | Mostly complete | `package.json` has the planned name, exports, peer deps, Node >=24, tsdown entries, test/compile scripts. `npm run compile`, `npm run typecheck`, and tests pass. | `index.ts` exports `configure` and public types, but not `stubsRoot` as called out in the plan. |
-| M1 — Types, Config & Canonical Core | Mostly complete | `src/types.ts`, `src/define_config.ts`, `src/stores/main.ts`, and `src/core/{canonical_json,hash_chain,redactor,assembler}.ts` exist. Core coverage is 91.85%. `src/types.ts` has no `any` matches. | Payload cap is only applied to `newValues`, not `oldValues` or `metadata`. Some thrown errors are plain `Error`. |
-| M2 — Context, Pipeline & Lucid Store | Mostly complete | `src/audit_context.ts`, middleware, pipeline, Lucid store, migration stubs, audit model, provider, and service facade exist. SQLite tests pass. | CLI actor fallback is not console-aware. Pipeline enqueue failures can be ignored by facade calls. |
-| M3 — Auditable Mixin & Domain Events | Mostly complete | `src/mixins/auditable.ts`, `src/services/log_builder.ts`, and `src/listeners/auth_listener.ts` exist with integration tests. | Transactional outbox draining is not safe for concurrent drainers and does not enforce idempotent claiming. |
-| M4 — Configure Flow, Stubs & Commands | Mostly complete | `configure.ts`, stubs, command modules, and `commands/commands.json` exist. Configure and command tests pass. | `audit:prune` lacks the planned `--connection` option and does not invoke the retention `archive` hook before deletes. |
-| M5 — Additional Stores, Verification Hardening & Auth | Partial | Stream, HTTP, fanout, anchor, subject crypto, and auth listener files exist; tests pass in SQLite/local mode. | HTTP store `verify()` always yields valid and `prune()` is a no-op. Store contract tests disable verification/prune for HTTP and some stream modes. |
-| M6 — Multi-DB Matrix, Concurrency & Performance | Partial / not locally verified | CI has a DB matrix job and concurrency tests exist. Benchmarks exist under `benchmarks/`. | Testcontainers startup failures return `null` and affected tests return early, so CI can pass without actually proving Postgres/MySQL/concurrency. Benchmark results are documented only for SQLite in README. |
-| M7 — Docs, CI/CD & 1.0 Release | Partial | README and docs set exist; CI and release workflows exist; `npm pack --dry-run` excludes tests/bin. | Typed `E_AUDIT_*` errors are not used consistently. Docker matrix proof is not fail-closed. |
+| Milestone                                             | Status                         | Evidence                                                                                                                                                                                            | Remaining gap                                                                                                                                                                                                  |
+| ----------------------------------------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| M0 — Scaffold & Toolchain                             | Mostly complete                | `package.json` has the planned name, exports, peer deps, Node >=24, tsdown entries, test/compile scripts. `npm run compile`, `npm run typecheck`, and tests pass.                                   | `index.ts` exports `configure` and public types, but not `stubsRoot` as called out in the plan.                                                                                                                |
+| M1 — Types, Config & Canonical Core                   | Mostly complete                | `src/types.ts`, `src/define_config.ts`, `src/stores/main.ts`, and `src/core/{canonical_json,hash_chain,redactor,assembler}.ts` exist. Core coverage is 91.85%. `src/types.ts` has no `any` matches. | Payload cap is only applied to `newValues`, not `oldValues` or `metadata`. Some thrown errors are plain `Error`.                                                                                               |
+| M2 — Context, Pipeline & Lucid Store                  | Mostly complete                | `src/audit_context.ts`, middleware, pipeline, Lucid store, migration stubs, audit model, provider, and service facade exist. SQLite tests pass.                                                     | CLI actor fallback is not console-aware. Pipeline enqueue failures can be ignored by facade calls.                                                                                                             |
+| M3 — Auditable Mixin & Domain Events                  | Mostly complete                | `src/mixins/auditable.ts`, `src/services/log_builder.ts`, and `src/listeners/auth_listener.ts` exist with integration tests.                                                                        | Transactional outbox draining is not safe for concurrent drainers and does not enforce idempotent claiming.                                                                                                    |
+| M4 — Configure Flow, Stubs & Commands                 | Mostly complete                | `configure.ts`, stubs, command modules, and `commands/commands.json` exist. Configure and command tests pass.                                                                                       | `audit:prune` lacks the planned `--connection` option and does not invoke the retention `archive` hook before deletes.                                                                                         |
+| M5 — Additional Stores, Verification Hardening & Auth | Partial                        | Stream, HTTP, fanout, anchor, subject crypto, and auth listener files exist; tests pass in SQLite/local mode.                                                                                       | HTTP store `verify()` always yields valid and `prune()` is a no-op. Store contract tests disable verification/prune for HTTP and some stream modes.                                                            |
+| M6 — Multi-DB Matrix, Concurrency & Performance       | Partial / not locally verified | CI has a DB matrix job and concurrency tests exist. Benchmarks exist under `benchmarks/`.                                                                                                           | Testcontainers startup failures return `null` and affected tests return early, so CI can pass without actually proving Postgres/MySQL/concurrency. Benchmark results are documented only for SQLite in README. |
+| M7 — Docs, CI/CD & 1.0 Release                        | Partial                        | README and docs set exist; CI and release workflows exist; `npm pack --dry-run` excludes tests/bin.                                                                                                 | Typed `E_AUDIT_*` errors are not used consistently. Docker matrix proof is not fail-closed.                                                                                                                    |
 
 ## Findings to fix before treating this as plan-complete
 

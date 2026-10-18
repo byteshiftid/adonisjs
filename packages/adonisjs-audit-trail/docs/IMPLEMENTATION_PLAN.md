@@ -1,4 +1,4 @@
-## Implementation Plan: `@rikology/adonisjs-audit-trail` for AdonisJS v7
+## Implementation Plan: `@byteshiftid/adonisjs-audit-trail` for AdonisJS v7
 
 **Type:** Ready-to-execute implementation plan
 **Base:** [`adonisjs/pkg-starter-kit`](https://github.com/adonisjs/pkg-starter-kit) (v7 edition: Node ≥ 24, ESM, tsdown, Japa, release-it)
@@ -11,7 +11,7 @@ This plan is ordered so that **every milestone ends with a green test suite and 
 
 ## Conventions used in this plan
 
-- Package name placeholder: `@rikology/adonisjs-audit-trail` (npm) / import alias `@rikology/adonisjs-audit-trail`. Rename globally before M0 ends.
+- Package name placeholder: `@byteshiftid/adonisjs-audit-trail` (npm) / import alias `@byteshiftid/adonisjs-audit-trail`. Rename globally before M0 ends.
 - File naming: `snake_case` (enforced by `@adonisjs/eslint-config`).
 - All source is ESM TypeScript under `src/`; nothing in `src/` imports from `providers/` (one-way dependency).
 - "AC" = acceptance criteria for the task.
@@ -52,7 +52,7 @@ Edit `package.json`:
 
 ```jsonc
 {
-  "name": "@rikology/adonisjs-audit-trail",
+  "name": "@byteshiftid/adonisjs-audit-trail",
   "description": "Production-grade, tamper-evident audit trail for AdonisJS v7",
   "keywords": ["adonisjs", "audit", "audit-trail", "lucid", "compliance", "tamper-evident"],
   "exports": {
@@ -412,7 +412,7 @@ export function Auditable<T extends NormalizeConstructor<typeof BaseModel>>(supe
 Implements the fluent API from T2.8; `commitSync()` forces request-coupled semantics for that event regardless of global mode. Typed event names via `KnownAuditEvent` + `AuditEvents` augmentation; ship a doc snippet:
 
 ```ts
-declare module '@rikology/adonisjs-audit-trail/types' {
+declare module '@byteshiftid/adonisjs-audit-trail/types' {
   interface AuditEvents { 'invoice.approved': true; 'document.exported': true }
 }
 ```
@@ -460,17 +460,17 @@ export async function configure(command: Configure) {
   await codemods.makeUsingStub(stubsRoot, 'transformers/audit_transformer.stub', {})
 
   await codemods.updateRcFile((rc) => {
-    rc.addProvider('@rikology/adonisjs-audit-trail/audit_provider')
-    rc.addCommand('@rikology/adonisjs-audit-trail/commands')
+    rc.addProvider('@byteshiftid/adonisjs-audit-trail/audit_provider')
+    rc.addCommand('@byteshiftid/adonisjs-audit-trail/commands')
   })
   await codemods.registerMiddleware('router', [
-    { path: '@rikology/adonisjs-audit-trail/audit_context_middleware' },
+    { path: '@byteshiftid/adonisjs-audit-trail/audit_context_middleware' },
   ])
   await codemods.defineEnvValidations({
     variables: { AUDIT_REDACTION_SALT: 'Env.schema.string.optional()' },
-    leadingComment: 'Variables for @rikology/adonisjs-audit-trail',
+    leadingComment: 'Variables for @byteshiftid/adonisjs-audit-trail',
   })
-  command.logger.success('@rikology/adonisjs-audit-trail configured. Next: run `node ace migration:run` and review config/audit.ts')
+  command.logger.success('@byteshiftid/adonisjs-audit-trail configured. Next: run `node ace migration:run` and review config/audit.ts')
 }
 ```
 

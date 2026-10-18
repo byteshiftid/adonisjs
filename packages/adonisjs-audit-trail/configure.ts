@@ -148,20 +148,20 @@ export async function configure(command: Configure) {
   await codemods.makeUsingStub(stubsRoot, 'start/audit_events.stub', {})
 
   await codemods.updateRcFile((rcFile) => {
-    rcFile.addProvider('@rikology/adonisjs-audit-trail/audit_provider')
-    rcFile.addCommand('@rikology/adonisjs-audit-trail/commands')
+    rcFile.addProvider('@byteshiftid/adonisjs-audit-trail/audit_provider')
+    rcFile.addCommand('@byteshiftid/adonisjs-audit-trail/commands')
   })
 
   await codemods.registerMiddleware('router', [
-    { path: '@rikology/adonisjs-audit-trail/audit_context_middleware' },
+    { path: '@byteshiftid/adonisjs-audit-trail/audit_context_middleware' },
   ])
 
   await codemods.defineEnvValidations({
     variables: { AUDIT_REDACTION_SALT: 'Env.schema.string.optional()' },
-    leadingComment: 'Variables for @rikology/adonisjs-audit-trail',
+    leadingComment: 'Variables for @byteshiftid/adonisjs-audit-trail',
   })
 
   command.logger.success(
-    '@rikology/adonisjs-audit-trail configured. Next: run `node ace migration:run` and review config/audit.ts'
+    '@byteshiftid/adonisjs-audit-trail configured. Next: run `node ace migration:run` and review config/audit.ts'
   )
 }

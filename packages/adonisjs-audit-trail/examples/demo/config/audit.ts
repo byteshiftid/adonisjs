@@ -1,4 +1,4 @@
-import { defineConfig, stores } from '@rikology/adonisjs-audit-trail'
+import { defineConfig, stores } from '@byteshiftid/adonisjs-audit-trail'
 
 export default defineConfig({
   /**

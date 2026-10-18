@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in improving `@rikology/adonisjs-audit-trail`. This document explains how to set up the project, the conventions we follow, and what to expect when you open a pull request.
+Thanks for your interest in improving `@byteshiftid/adonisjs-audit-trail`. This document explains how to set up the project, the conventions we follow, and what to expect when you open a pull request.
 
 ## Code of conduct
 
@@ -22,25 +22,25 @@ This project ships a [Code of Conduct](./CODE_OF_CONDUCT.md). By participating y
 ## Getting started
 
 ```bash
-git clone https://github.com/rikoriswandha/adonisjs-audit-trail.git
+git clone https://github.com/byteshiftid/adonisjs.git
 cd adonisjs-audit-trail
 npm install
 ```
 
 ## Development workflow
 
-| Task | Command |
-| ---- | ------- |
-| Type-check | `npm run typecheck` |
-| Lint | `npm run lint` |
-| Auto-format | `npm run format` |
-| Run tests (SQLite + coverage gate) | `npm test` |
-| Run tests without coverage | `npm run quick:test` |
-| Run the full DB matrix | `SKIP_DOCKER_TESTS=0 npm run quick:test` (Docker required) |
-| SQLite-only run (skip Docker) | `SKIP_DOCKER_TESTS=1 npm test` |
-| Build the package | `npm run build` |
-| Verify built exports resolve | `npm run verify:exports` |
-| Benchmarks | `npm run bench` (or `BENCH_DB=postgres npm run bench`) |
+| Task                               | Command                                                    |
+| ---------------------------------- | ---------------------------------------------------------- |
+| Type-check                         | `npm run typecheck`                                        |
+| Lint                               | `npm run lint`                                             |
+| Auto-format                        | `npm run format`                                           |
+| Run tests (SQLite + coverage gate) | `npm test`                                                 |
+| Run tests without coverage         | `npm run quick:test`                                       |
+| Run the full DB matrix             | `SKIP_DOCKER_TESTS=0 npm run quick:test` (Docker required) |
+| SQLite-only run (skip Docker)      | `SKIP_DOCKER_TESTS=1 npm test`                             |
+| Build the package                  | `npm run build`                                            |
+| Verify built exports resolve       | `npm run verify:exports`                                   |
+| Benchmarks                         | `npm run bench` (or `BENCH_DB=postgres npm run bench`)     |
 
 `npm test` and `npm run build` both run lint first, so a clean `npm test` is a good pre-push check.
 

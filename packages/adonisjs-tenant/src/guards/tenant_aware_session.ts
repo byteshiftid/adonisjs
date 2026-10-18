@@ -53,8 +53,7 @@ export class TenantAwareSessionGuard<RealUser> extends SessionGuard<
 
 export function tenantAwareSessionGuard<RealUser>(config: {
   provider:
-    | SessionUserProviderContract<RealUser>
-    | ConfigProvider<SessionUserProviderContract<RealUser>>
+    SessionUserProviderContract<RealUser> | ConfigProvider<SessionUserProviderContract<RealUser>>
   tenantProvider: TenantUserProviderContract<RealUser>
 }): GuardConfigProvider<(ctx: HttpContext) => TenantAwareSessionGuard<RealUser>> {
   return {

@@ -1,4 +1,4 @@
-## Architecture Plan: `@rikology/adonisjs-audit-trail` — Production-Grade Audit Trail for AdonisJS v7
+## Architecture Plan: `@byteshiftid/adonisjs-audit-trail` — Production-Grade Audit Trail for AdonisJS v7
 
 **Status:** Proposal / Design Document
 **Target framework:** AdonisJS v7 (Node.js ≥ 24, TypeScript 5.9/6.0, ESM-only)
@@ -210,7 +210,7 @@ Hash chains die on serialization ambiguity. We define `canonical(entry)`:
 ### 6.1 Package layout
 
 ```
-@rikology/adonisjs-audit-trail/
+@byteshiftid/adonisjs-audit-trail/
 ├── package.json                  # exports map, peer deps, ESM only
 ├── configure.ts                  # node ace configure entrypoint
 ├── stubs/
@@ -285,7 +285,7 @@ Transactional-outbox does not atomically deliver to the target store: only the b
 ```ts
 import { compose } from '@adonisjs/core/helpers'
 import { BaseModel } from '@adonisjs/lucid/orm'
-import { Auditable } from '@rikology/adonisjs-audit-trail/auditable'
+import { Auditable } from '@byteshiftid/adonisjs-audit-trail/auditable'
 
 export default class Invoice extends compose(BaseModel, Auditable) {
   static auditConfig = {
@@ -303,7 +303,7 @@ Implementation: registers `afterCreate`, `afterUpdate`, `afterDelete` (and `afte
 ### 6.5 Domain-event facade
 
 ```ts
-import audit from '@rikology/adonisjs-audit-trail/services/main'
+import audit from '@byteshiftid/adonisjs-audit-trail/services/main'
 
 await audit
   .log('invoice.approved')        // typed union if user registers event names in config
@@ -321,7 +321,7 @@ Event-name typing: users may declare `events: ['invoice.approved', ...] as const
 
 ```ts
 // config/audit.ts
-import { defineConfig, stores } from '@rikology/adonisjs-audit-trail'
+import { defineConfig, stores } from '@byteshiftid/adonisjs-audit-trail'
 
 export default defineConfig({
   default: 'lucid',
@@ -372,7 +372,7 @@ export default defineConfig({
 
 ---
 
-## 7. configure flow (`node ace configure @rikology/adonisjs-audit-trail`)
+## 7. configure flow (`node ace configure @byteshiftid/adonisjs-audit-trail`)
 
 1. Publish `config/audit.ts` stub.
 2. Publish migration(s): `create_audits_table` (+ outbox if selected via prompt), with the immutability trigger guarded by a config flag.
@@ -428,7 +428,7 @@ Prompts: store choice, outbox mode (y/n), chain enabled (y/n), multi-tenant (y/n
 1. **Default `streamBy`** — `global` is simpler; `tenant` scales better. Proposal: `global` unless multi-tenant prompt answered yes.
 2. **Should `request-coupled` be the default for `deleted` events?** They're rare and high-value; leaning yes.
 3. **Hash chain on the `http` store** — chain locally before shipping vs. let the collector chain? Proposal: local chaining always; collector chaining optional.
-4. **License & name** — `@rikology/adonisjs-audit-trail`; MIT recommended for ecosystem adoption.
+4. **License & name** — `@byteshiftid/adonisjs-audit-trail`; MIT recommended for ecosystem adoption.
 
 ---
 

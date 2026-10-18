@@ -1,0 +1,10 @@
+**/build
+**/coverage
+**/tmp
+**/.adonisjs
+**/*.html
+**/CHANGELOG.md
+packages/*/docs
+packages/adonisjs-notifications/commands/commands.json
+packages/adonisjs-notifications/src/ui/dashboard/spa
+pnpm-lock.yaml

@@ -124,7 +124,7 @@ test.group('Configure hook', () => {
     try {
       await assert.rejects(
         () => configure(command as never),
-        /Cannot configure @rikology\/adonisjs-tenant without @adonisjs\/auth/
+        /Cannot configure @byteshiftid\/adonisjs-tenant without @adonisjs\/auth/
       )
 
       assert.equal(calls.codemodsCreated, 0)
@@ -144,9 +144,9 @@ test.group('Configure hook', () => {
     try {
       await configure(command as never)
 
-      assert.deepEqual(calls.providers, ['@rikology/adonisjs-tenant/providers/tenancy_provider'])
+      assert.deepEqual(calls.providers, ['@byteshiftid/adonisjs-tenant/providers/tenancy_provider'])
       assert.deepEqual(calls.middleware, [
-        { name: 'tenant', path: '@rikology/adonisjs-tenant/middleware' },
+        { name: 'tenant', path: '@byteshiftid/adonisjs-tenant/middleware' },
       ])
       assert.deepEqual(calls.stubs, ['config/tenancy.stub', 'migrations/tenant_user.stub'])
       assert.deepEqual(calls.prompts, [
@@ -168,7 +168,7 @@ test.group('Configure hook', () => {
       assert.notInclude(generatedMigration, "table.increments('id').primary()")
 
       const generatedConfig = readFileSync(join(appRoot, 'config', 'tenancy.ts'), 'utf-8')
-      assert.include(generatedConfig, "from '@rikology/adonisjs-tenant'")
+      assert.include(generatedConfig, "from '@byteshiftid/adonisjs-tenant'")
       assert.include(generatedConfig, 'failOnMissing: true')
     } finally {
       rmSync(appRoot, { recursive: true, force: true })

@@ -1,14 +1,15 @@
 {
-  "name": "@rikology/adonisjs-audit-trail",
+  "name": "@byteshiftid/adonisjs-audit-trail",
   "description": "Production-grade, tamper-evident audit trail for AdonisJS v7",
   "version": "1.2.4",
-  "homepage": "https://github.com/rikoriswandha/adonisjs-audit-trail#readme",
+  "homepage": "https://github.com/byteshiftid/adonisjs/tree/main/packages/adonisjs-audit-trail#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rikoriswandha/adonisjs-audit-trail.git"
+    "url": "git+https://github.com/byteshiftid/adonisjs.git",
+    "directory": "packages/adonisjs-audit-trail"
   },
   "bugs": {
-    "url": "https://github.com/rikoriswandha/adonisjs-audit-trail/issues"
+    "url": "https://github.com/byteshiftid/adonisjs/issues"
   },
   "engines": {
     "node": ">=24.0.0"
@@ -42,20 +43,19 @@
     "lint": "eslint . --no-warn-ignored",
     "format": "prettier --write .",
     "quick:test": "node --import=@poppinss/ts-exec --enable-source-maps bin/test.ts",
-    "test": "c8 npm run quick:test",
+    "test": "c8 pnpm run quick:test",
     "bench": "node --import=@poppinss/ts-exec benchmarks/main.ts",
-    "pretest": "npm run lint",
-    "precompile": "npm run lint",
+    "pretest": "pnpm run lint",
+    "precompile": "pnpm run lint",
     "compile": "tsdown && tsc --emitDeclarationOnly --declaration",
-    "postcompile": "npm run copy:templates && npm run copy:commands",
-    "build": "npm run compile",
+    "postcompile": "pnpm run copy:templates && pnpm run copy:commands",
+    "build": "pnpm run compile",
     "verify:exports": "node scripts/verify-exports.mjs",
     "e2e:consumer": "bash scripts/e2e-configure.sh --all",
-    "release": "release-it",
-    "version": "npm run build",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "pnpm run build"
   },
   "keywords": [
+    "adonisjs-package",
     "adonisjs",
     "adonisjs-v7",
     "audit",
@@ -76,39 +76,37 @@
     "typescript"
   ],
   "sideEffects": false,
-  "author": "Rikology",
+  "author": "Riko Riswandha Fahmi Prasetyo <rikorisw@gmail.com> (https://byteshift.id)",
   "license": "MIT",
   "devDependencies": {
-    "@adonisjs/assembler": "^8.0.0",
-    "@adonisjs/auth": "^10.1.0",
-    "@adonisjs/core": "^7.0.1",
-    "@adonisjs/eslint-config": "^3.0.0",
-    "@adonisjs/lucid": "^22.4.2",
-    "@adonisjs/prettier-config": "^1.4.5",
-    "@adonisjs/tsconfig": "^2.0.0",
-    "@japa/assert": "^4.2.0",
+    "@adonisjs/assembler": "catalog:",
+    "@adonisjs/auth": "catalog:",
+    "@adonisjs/core": "catalog:",
+    "@adonisjs/eslint-config": "catalog:",
+    "@adonisjs/lucid": "catalog:",
+    "@adonisjs/prettier-config": "catalog:",
+    "@adonisjs/tsconfig": "catalog:",
+    "@japa/assert": "catalog:",
     "@japa/expect-type": "^2.0.4",
     "@japa/file-system": "^3.0.0",
-    "@japa/runner": "^5.3.0",
-    "@poppinss/ts-exec": "^1.4.4",
-    "@release-it/conventional-changelog": "^11.0.1",
+    "@japa/runner": "catalog:",
+    "@poppinss/ts-exec": "catalog:",
     "@types/better-sqlite3": "^7.6.13",
-    "@types/luxon": "^3.7.1",
-    "@types/node": "^25.3.5",
+    "@types/luxon": "catalog:",
+    "@types/node": "catalog:",
     "better-sqlite3": "^12.10.0",
-    "c8": "^11.0.0",
-    "copyfiles": "^2.4.1",
-    "cross-env": "^10.1.0",
-    "eslint": "^10.0.3",
-    "luxon": "^3.7.2",
+    "c8": "catalog:",
+    "copyfiles": "catalog:",
+    "cross-env": "catalog:",
+    "eslint": "catalog:",
+    "luxon": "catalog:",
     "mysql2": "^3.22.5",
     "pg": "^8.21.0",
-    "prettier": "^3.8.1",
-    "release-it": "^20.2.0",
+    "prettier": "catalog:",
     "testcontainers": "^12.0.2",
     "tinybench": "^6.0.2",
-    "tsdown": "^0.21.0",
-    "typescript": "^5.9.3"
+    "tsdown": "catalog:",
+    "typescript": "catalog:"
   },
   "peerDependencies": {
     "@adonisjs/assembler": "^8.0.0",
@@ -129,7 +127,8 @@
     }
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "tsdown": {
     "entry": [
@@ -158,32 +157,6 @@
     "treeshake": false,
     "sourcemaps": false,
     "target": "esnext"
-  },
-  "release-it": {
-    "git": {
-      "requireCleanWorkingDir": true,
-      "requireUpstream": true,
-      "commitMessage": "chore(release): ${version}",
-      "tagAnnotation": "v${version}",
-      "push": true,
-      "tagName": "v${version}"
-    },
-    "github": {
-      "release": true
-    },
-    "npm": {
-      "publish": true,
-      "skipChecks": true
-    },
-    "plugins": {
-      "@release-it/conventional-changelog": {
-        "preset": {
-          "name": "angular"
-        },
-        "infile": "CHANGELOG.md",
-        "header": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThis project adheres to [Semantic Versioning](https://semver.org/) and uses [Conventional Commits](https://www.conventionalcommits.org/) for changelog generation. Releases are managed with `release-it`; contributors do not need to edit this file manually.\n\n## Unreleased"
-      }
-    }
   },
   "c8": {
     "reporter": [

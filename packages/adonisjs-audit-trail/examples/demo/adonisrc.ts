@@ -28,7 +28,7 @@ export default defineConfig({
     () => import('@adonisjs/core/commands'),
     () => import('@adonisjs/lucid/commands'),
     () => import('@adonisjs/session/commands'),
-    () => import('@rikology/adonisjs-audit-trail/commands'),
+    () => import('@byteshiftid/adonisjs-audit-trail/commands'),
   ],
 
   /*
@@ -54,7 +54,7 @@ export default defineConfig({
     () => import('@adonisjs/cors/cors_provider'),
     () => import('@adonisjs/auth/auth_provider'),
     () => import('#providers/api_provider'),
-    () => import('@rikology/adonisjs-audit-trail/audit_provider'),
+    () => import('@byteshiftid/adonisjs-audit-trail/audit_provider'),
   ],
 
   /*

@@ -1,5 +1,5 @@
 import { readFile } from 'node:fs/promises'
-import type { CommandMetaData } from '@adonisjs/ace/types'
+import type { CommandMetaData } from '@adonisjs/core/types/ace'
 
 let commandsMetaData: CommandMetaData[] | undefined
 

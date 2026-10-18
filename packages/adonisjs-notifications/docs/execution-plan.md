@@ -24,7 +24,7 @@ Implement a production-grade AdonisJS v7 notification package with Laravel-inspi
 - Update GitHub Actions Node versions if the workflow still targets old Node releases.
 - Add package exports for planned provider, service, channels, testing, and mixin entrypoints.
 - Decide package namespace:
-  - `@rikology/adonisjs-notifications`
+  - `@byteshiftid/adonisjs-notifications`
   - `@rikoris/adonisjs-notifications`
   - another scoped name
 

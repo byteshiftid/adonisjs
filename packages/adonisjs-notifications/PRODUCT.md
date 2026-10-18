@@ -10,7 +10,7 @@ AdonisJS developers who are building or debugging notification flows in local de
 
 ## Product Purpose
 
-The notification dashboard is a read-and-control surface for the `@rikology/adonisjs-notifications` package. It shows delivery metrics across channels and statuses, and it lets a developer inspect and manage a single notifiable's inbox. Success means a failing delivery is spotted in under three seconds, and a single notification's payload is reachable in one click.
+The notification dashboard is a read-and-control surface for the `@byteshiftid/adonisjs-notifications` package. It shows delivery metrics across channels and statuses, and it lets a developer inspect and manage a single notifiable's inbox. Success means a failing delivery is spotted in under three seconds, and a single notification's payload is reachable in one click.
 
 ## Brand Personality
 

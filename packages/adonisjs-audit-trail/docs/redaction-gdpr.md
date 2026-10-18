@@ -46,7 +46,7 @@ node ace audit:forget --subject=user-123
 Configure a `SubjectKeyStore` in `config/audit.ts`:
 
 ```ts
-import { defineConfig, MemorySubjectKeyStore, stores } from '@rikology/adonisjs-audit-trail'
+import { defineConfig, MemorySubjectKeyStore, stores } from '@byteshiftid/adonisjs-audit-trail'
 
 const keyStore = new MemorySubjectKeyStore()
 

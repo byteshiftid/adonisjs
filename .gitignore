@@ -1,0 +1,16 @@
+node_modules
+coverage
+build
+dist
+tmp
+storage
+*.log
+*.tgz
+.DS_Store
+.idea
+.vscode/
+.env
+.env.*
+!.env.example
+package-lock.json
+codedb.snapshot

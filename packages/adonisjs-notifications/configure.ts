@@ -40,7 +40,6 @@ export async function configure(command: Configure) {
   }
 
   try {
-    // @ts-expect-error Optional peer dependency
     await import('@adonisjs/queue')
     queueInstalled = true
   } catch {
@@ -122,14 +121,14 @@ export async function configure(command: Configure) {
    */
   await codemods.updateRcFile((rcFile) => {
     rcFile
-      .addProvider('@rikology/adonisjs-notifications/notification_provider')
-      .addCommand('@rikology/adonisjs-notifications/commands')
+      .addProvider('@byteshiftid/adonisjs-notifications/notification_provider')
+      .addCommand('@byteshiftid/adonisjs-notifications/commands')
   })
 
   /**
    * Step 6: Log summary
    */
-  command.logger.success('@rikology/adonisjs-notifications configured successfully')
+  command.logger.success('@byteshiftid/adonisjs-notifications configured successfully')
 
   command.logger.log('')
   command.logger.log('Channels: mail, database, log, null')
@@ -150,7 +149,7 @@ export async function configure(command: Configure) {
     command.logger.log('  • Dashboard enabled — add this to start/routes.ts:')
     command.logger.log('')
     command.logger.log(
-      '    import { notificationDashboardRoutes } from "@rikology/adonisjs-notifications/ui/dashboard"'
+      '    import { notificationDashboardRoutes } from "@byteshiftid/adonisjs-notifications/ui/dashboard"'
     )
     command.logger.log('    router.group(() => {')
     command.logger.log('      notificationDashboardRoutes()')

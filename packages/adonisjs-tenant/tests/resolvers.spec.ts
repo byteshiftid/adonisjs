@@ -3,7 +3,7 @@ import { SubdomainResolver } from '../src/resolvers/subdomain_resolver.js'
 import { HeaderResolver } from '../src/resolvers/header_resolver.js'
 import { JwtResolver } from '../src/resolvers/jwt_resolver.js'
 import { PathResolver } from '../src/resolvers/path_resolver.js'
-import type { HttpContext } from '@adonisjs/http-server'
+import type { HttpContext } from '@adonisjs/core/http'
 
 test.group('SubdomainResolver', () => {
   function mockContext(hostname: string | null): HttpContext {

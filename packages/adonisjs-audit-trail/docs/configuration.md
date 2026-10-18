@@ -3,7 +3,7 @@
 Configuration lives in `config/audit.ts` and follows the AdonisJS v7 manager/driver pattern (`defineConfig` + `stores`).
 
 ```ts
-import { defineConfig, stores } from '@rikology/adonisjs-audit-trail'
+import { defineConfig, stores } from '@byteshiftid/adonisjs-audit-trail'
 
 export default defineConfig({
   default: 'lucid',
@@ -100,7 +100,7 @@ A salt is required when `redaction.mode` is `'hash'`.
 Register domain events in `start/audit_events.ts`:
 
 ```ts
-declare module '@rikology/adonisjs-audit-trail/types' {
+declare module '@byteshiftid/adonisjs-audit-trail/types' {
   interface AuditEvents {
     'invoice.approved': true
     'document.exported': true
