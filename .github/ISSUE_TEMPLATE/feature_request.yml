@@ -6,6 +6,17 @@ body:
     attributes:
       value: |
         Thanks for suggesting a feature. Please describe the use case and the problem you're trying to solve.
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package
+      options:
+        - '@byteshiftid/adonisjs-audit-trail'
+        - '@byteshiftid/adonisjs-notifications'
+        - '@byteshiftid/adonisjs-tenant'
+        - New package or cross-package change
+    validations:
+      required: true
   - type: textarea
     id: problem
     attributes:

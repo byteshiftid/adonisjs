@@ -6,11 +6,21 @@ body:
     attributes:
       value: |
         Thanks for taking the time to report a bug. Please fill out the sections below so we can reproduce and fix it.
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package
+      options:
+        - '@byteshiftid/adonisjs-audit-trail'
+        - '@byteshiftid/adonisjs-notifications'
+        - '@byteshiftid/adonisjs-tenant'
+    validations:
+      required: true
   - type: input
     id: version
     attributes:
       label: Package version
-      description: The version of `@byteshiftid/adonisjs-audit-trail` where you see the bug.
+      description: The version of the package where you see the bug.
       placeholder: e.g. 1.0.0
     validations:
       required: true

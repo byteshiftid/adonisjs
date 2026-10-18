@@ -8,3 +8,4 @@ packages/*/docs
 packages/adonisjs-notifications/commands/commands.json
 packages/adonisjs-notifications/src/ui/dashboard/spa
 pnpm-lock.yaml
+**/database/schema.ts

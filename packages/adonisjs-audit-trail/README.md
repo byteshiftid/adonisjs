@@ -174,7 +174,7 @@ BENCH_DB=postgres npm run bench
 
 ## Contributing
 
-Contributions are welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md) for setup, the development workflow, and conventions. Please also read the [Code of Conduct](./CODE_OF_CONDUCT.md).
+Contributions are welcome — see the repository [CONTRIBUTING.md](../../CONTRIBUTING.md) for setup, the development workflow, and conventions. Please also read the [Code of Conduct](../../CODE_OF_CONDUCT.md).
 
 ## Security
 
@@ -182,4 +182,4 @@ If you discover a security vulnerability, please **do not open a public issue**.
 
 ## License
 
-[MIT](./LICENSE.md) © Rikology
+[MIT](./LICENSE.md) © Riko Riswandha Fahmi Prasetyo (Byteshift)

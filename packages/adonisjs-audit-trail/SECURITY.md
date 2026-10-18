@@ -9,7 +9,7 @@
 
 ## Reporting a vulnerability
 
-If you discover a security issue in `@byteshiftid/adonisjs-audit-trail`, please email **security@rikology.dev** with:
+If you discover a security issue in `@byteshiftid/adonisjs-audit-trail`, report it privately by [opening a GitHub security advisory](https://github.com/byteshiftid/adonisjs/security/advisories/new) with:
 
 - A description of the vulnerability.
 - Steps to reproduce (proof-of-concept code, config, or commands).
