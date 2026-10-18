@@ -231,9 +231,10 @@ export class NotificationManager {
   }
 
   /**
-   * Determine whether a notification should be queued.
+   * Determine whether `send()` queues this notification. The testing fake uses the same answer,
+   * so `send()` is recorded as queued exactly when the real manager would queue it.
    */
-  private shouldQueueNotification(notification: Notification): boolean {
+  shouldQueueNotification(notification: Notification): boolean {
     // Config master switch is off
     if (!this.config.queue.enabled) {
       return false

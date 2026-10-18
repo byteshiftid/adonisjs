@@ -32,6 +32,7 @@ export class FakeNotificationManager {
   // --- Core send methods ---
 
   async send(notifiable: unknown | unknown[], notification: Notification): Promise<void> {
+    const queued = this.#realManager.shouldQueueNotification(notification)
     const recipients = normalizeRecipients(notifiable)
 
     for (const recipient of recipients) {
@@ -40,7 +41,7 @@ export class FakeNotificationManager {
       const real = channels.filter((c) => !this.#isIntercepted(c))
 
       if (intercepted.length > 0) {
-        this.#record(recipient.original, notification, intercepted, true)
+        this.#record(recipient.original, notification, intercepted, queued)
       }
 
       for (const channelName of real) {

@@ -47,7 +47,8 @@ fake.assertNotSentTo(notifiable, NotificationClass)
 // Assert sent on a specific channel
 fake.assertSentOnChannel(notifiable, NotificationClass, 'mail')
 
-// Assert queued for a notifiable
+// Assert queued for a notifiable. `send()` is recorded as queued only when the real manager would
+// queue it (queue enabled, a dispatcher attached, and `shouldQueue` not `false`); otherwise as sent.
 fake.assertQueued(notifiable, NotificationClass)
 
 // Assert nothing sent at all

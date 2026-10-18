@@ -41,6 +41,14 @@ class QueuedNotification extends Notification {
   }
 }
 
+class ImmediateNotification extends Notification {
+  shouldQueue = false
+
+  via(_notifiable: unknown): string[] {
+    return ['mock']
+  }
+}
+
 class FilterableNotification extends Notification {
   subject: string
 
@@ -70,6 +78,21 @@ function createConfig(
     serialization: { notificationAliases: {}, notifiableAliases: {} },
     preferences: { quietHours: { enabled: false, bypassPriorities: [] } },
   }
+}
+
+/**
+ * Manager whose `send()` really queues: queue enabled and a dispatcher attached.
+ */
+function createQueueingManager(
+  channels: Record<string, () => NotificationChannel | Promise<NotificationChannel>>
+): NotificationManager {
+  const config = createConfig(channels)
+  config.queue = { enabled: true, defaultQueue: 'default' }
+  const manager = new NotificationManager(config)
+  manager.setQueueDispatcher({
+    async dispatch() {},
+  })
+  return manager
 }
 
 const notifiable = { id: 1, name: 'Alice' }
@@ -152,33 +175,54 @@ test.group('FakeNotificationManager - Recording send/sendNow', () => {
     assert.equal(sent[1].notifiable.id, 2)
   })
 
-  test('send records single recipient as queued', async ({ assert }) => {
+  test('send records single recipient as sent when the queue is disabled', async ({ assert }) => {
     const config = createConfig({ mock: () => new MockChannel() })
     const manager = new NotificationManager(config)
     const fake = manager.fake()
 
     await manager.send(notifiable, new TestNotification())
 
+    assert.lengthOf(fake.sent(), 1)
+    assert.isFalse(fake.sent()[0].queued)
+    assert.lengthOf(fake.queued(), 0)
+  })
+
+  test('send records single recipient as queued when the real manager queues it', async ({
+    assert,
+  }) => {
+    const manager = createQueueingManager({ mock: () => new MockChannel() })
+    const fake = manager.fake()
+
+    await manager.send(notifiable, new TestNotification())
+
     const queued = fake.queued()
-    assert.equal(queued.length, 1)
+    assert.lengthOf(queued, 1)
     assert.isTrue(queued[0].queued)
     assert.instanceOf(queued[0].notification, TestNotification)
+    assert.lengthOf(fake.sent(), 0)
   })
 
   test('send with shouldQueue=true records as queued', async ({ assert }) => {
-    const config = createConfig({ mock: () => new MockChannel() })
-    const manager = new NotificationManager(config)
+    const manager = createQueueingManager({ mock: () => new MockChannel() })
     const fake = manager.fake()
 
     await manager.send(notifiable, new QueuedNotification())
 
-    // The fake intercepts before queue logic; queued flag comes from notification.shouldQueue
-    // But actually in our implementation, fake.send() always records queued=true for send()
     const queued = fake.queued()
-
-    // In the fake: send() records as queued=true, sendNow() records as queued=false
-    assert.equal(queued.length, 1)
+    assert.lengthOf(queued, 1)
     assert.instanceOf(queued[0].notification, QueuedNotification)
+  })
+
+  test('send with shouldQueue=false records as sent even when queueing is enabled', async ({
+    assert,
+  }) => {
+    const manager = createQueueingManager({ mock: () => new MockChannel() })
+    const fake = manager.fake()
+
+    await manager.send(notifiable, new ImmediateNotification())
+
+    assert.lengthOf(fake.sent(), 1)
+    assert.lengthOf(fake.queued(), 0)
   })
 })
 
@@ -324,14 +368,11 @@ test.group('FakeNotificationManager - assertSentOnChannel', () => {
 
 test.group('FakeNotificationManager - assertQueued', () => {
   test('passes when notification is queued', async ({ assert }) => {
-    const config = createConfig({ mock: () => new MockChannel() })
-    const manager = new NotificationManager(config)
+    const manager = createQueueingManager({ mock: () => new MockChannel() })
     const fake = manager.fake()
 
-    // Use send() which records as queued in fake
     await manager.send(notifiable, new TestNotification())
 
-    // Actually wait... our fake.send() records as queued=true
     assert.doesNotThrow(() => fake.assertQueued(notifiable, TestNotification))
   })
 
@@ -375,8 +416,7 @@ test.group('FakeNotificationManager - assertNothingSent / assertNoneQueued', () 
   })
 
   test('assertNoneQueued throws when queued', async ({ assert }) => {
-    const config = createConfig({ mock: () => new MockChannel() })
-    const manager = new NotificationManager(config)
+    const manager = createQueueingManager({ mock: () => new MockChannel() })
     const fake = manager.fake()
 
     await manager.send(notifiable, new TestNotification())
@@ -412,8 +452,7 @@ test.group('FakeNotificationManager - Count assertions', () => {
   })
 
   test('assertQueuedCount without class filter', async ({ assert }) => {
-    const config = createConfig({ mock: () => new MockChannel() })
-    const manager = new NotificationManager(config)
+    const manager = createQueueingManager({ mock: () => new MockChannel() })
     const fake = manager.fake()
 
     await manager.send(notifiable, new TestNotification())
@@ -424,8 +463,7 @@ test.group('FakeNotificationManager - Count assertions', () => {
   })
 
   test('assertQueuedCount with class filter', async ({ assert }) => {
-    const config = createConfig({ mock: () => new MockChannel() })
-    const manager = new NotificationManager(config)
+    const manager = createQueueingManager({ mock: () => new MockChannel() })
     const fake = manager.fake()
 
     await manager.send(notifiable, new TestNotification())
@@ -519,8 +557,7 @@ test.group('FakeNotificationManager - sent() / queued() query methods', () => {
   })
 
   test('queued() returns queued notifications', async ({ assert }) => {
-    const config = createConfig({ mock: () => new MockChannel() })
-    const manager = new NotificationManager(config)
+    const manager = createQueueingManager({ mock: () => new MockChannel() })
     const fake = manager.fake()
 
     await manager.send(notifiable, new TestNotification())
