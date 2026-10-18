@@ -97,6 +97,7 @@ export async function configure(command: Configure) {
 
     await codemods.makeUsingStub(stubsRoot, 'migrations/create_notifications_table.stub', {
       entity: command.app.generators.createEntity('notifications'),
+      tableName: 'notifications',
       migration: {
         folder: 'database/migrations',
         fileName: `${timestamp1}_create_notifications_table.ts`,
@@ -108,6 +109,7 @@ export async function configure(command: Configure) {
       'migrations/create_notification_deliveries_table.stub',
       {
         entity: command.app.generators.createEntity('notification_deliveries'),
+        tableName: 'notification_deliveries',
         migration: {
           folder: 'database/migrations',
           fileName: `${timestamp2}_create_notification_deliveries_table.ts`,
