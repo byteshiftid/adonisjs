@@ -7,6 +7,10 @@ export interface Notifiable {
 }
 
 export interface NormalizedNotifiable {
+  /**
+   * Recipient id. Normalization always produces a string (see `resolveNotifiableId`), so
+   * numeric and string ids compare equal in every store and query.
+   */
   id: string | number
   type: string
   routes: Map<string, unknown>

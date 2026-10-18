@@ -51,7 +51,7 @@ export class LucidNotificationRepository implements NotificationRepository {
       id: notification.id || randomUUID(),
       type: notification.type,
       notifiableType: notification.notifiableType,
-      notifiableId: notification.notifiableId,
+      notifiableId: String(notification.notifiableId),
       data: notification.data,
       metadata: notification.metadata ?? null,
     })
@@ -80,7 +80,7 @@ export class LucidNotificationRepository implements NotificationRepository {
 
     const query = Model.query()
       .where('notifiable_type', notifiableType)
-      .where('notifiable_id', notifiableId)
+      .where('notifiable_id', String(notifiableId))
 
     if (options?.unreadOnly) {
       query.whereNull('read_at')
@@ -125,7 +125,7 @@ export class LucidNotificationRepository implements NotificationRepository {
     const Model = await this.getNotificationModel()
     await Model.query()
       .where('notifiable_type', notifiableType)
-      .where('notifiable_id', notifiableId)
+      .where('notifiable_id', String(notifiableId))
       .whereNull('read_at')
       .update({ read_at: DateTime.now().toSQL() })
   }
@@ -145,7 +145,7 @@ export class LucidNotificationRepository implements NotificationRepository {
     const Model = await this.getNotificationModel()
     const result = await Model.query()
       .where('notifiable_type', notifiableType)
-      .where('notifiable_id', notifiableId)
+      .where('notifiable_id', String(notifiableId))
       .whereNull('read_at')
       .count('* as total')
       .first()
@@ -165,7 +165,7 @@ export class LucidNotificationRepository implements NotificationRepository {
       notificationId: delivery.notificationId ?? null,
       notificationType: delivery.notificationType,
       notifiableType: delivery.notifiableType,
-      notifiableId: delivery.notifiableId,
+      notifiableId: String(delivery.notifiableId),
       channel: delivery.channel,
       status: delivery.status,
       attempts: delivery.attempts ?? 1,
@@ -282,7 +282,7 @@ export class LucidNotificationRepository implements NotificationRepository {
     const Model = await this.getNotificationModel()
     const baseQuery = Model.query()
       .where('notifiable_type', notifiableType)
-      .where('notifiable_id', notifiableId)
+      .where('notifiable_id', String(notifiableId))
 
     const totalResult = await baseQuery.clone().count('* as total').first()
     const total = totalResult?.$extras?.total ?? 0
@@ -314,7 +314,7 @@ export class LucidNotificationRepository implements NotificationRepository {
       query = query.where('notifiable_type', filter.notifiableType)
     }
     if (filter?.notifiableId !== undefined) {
-      query = query.where('notifiable_id', filter.notifiableId)
+      query = query.where('notifiable_id', String(filter.notifiableId))
     }
     if (filter?.channel) {
       query = query.where('channel', filter.channel)

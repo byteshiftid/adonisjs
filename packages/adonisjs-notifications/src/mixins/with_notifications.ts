@@ -3,6 +3,7 @@ import type { BaseModel } from '@adonisjs/lucid/orm'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import type { Notification } from '../notification.ts'
 import type { NotificationManager } from '../notification_manager.ts'
+import { resolveNotifiableId, resolveNotifiableType } from '../utils/notifiable_resolver.ts'
 
 /**
  * Interface for models that use the withNotifications mixin.
@@ -182,19 +183,19 @@ function buildNotificationsQuery(
 }
 
 /**
- * Extract notifiable type and id from a model instance.
+ * Extract the notification discriminator and id for a model instance. Uses the same resolver
+ * as the write path, so queries match the rows that were stored for this instance.
  */
-function getNotifiableInfo(instance: any): {
+function getNotifiableInfo(instance: object): {
   notifiableType: string
-  notifiableId: string | number
+  notifiableId: string
 } {
-  const ctor = instance.constructor as typeof BaseModel
-  const notifiableType = ctor.table ?? ctor.name
-  const notifiableId = instance.$primaryKeyValue as number | string
+  const notifiableId = resolveNotifiableId(instance)
 
-  if (notifiableId === undefined || notifiableId === null) {
-    throw new Error(`Cannot query notifications: ${ctor.name} does not have a primary key value.`)
+  if (notifiableId === undefined) {
+    const name = instance.constructor.name
+    throw new Error(`Cannot query notifications: ${name} does not have a primary key value.`)
   }
 
-  return { notifiableType, notifiableId }
+  return { notifiableType: resolveNotifiableType(instance), notifiableId }
 }

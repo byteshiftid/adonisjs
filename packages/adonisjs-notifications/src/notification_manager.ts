@@ -506,7 +506,7 @@ export class NotificationManager {
         const notifiable = {
           original: { id: delivery.notifiableId } as any,
           type: delivery.notifiableType,
-          id: delivery.notifiableId,
+          id: String(delivery.notifiableId),
           routes: new Map<string, unknown>(),
         }
         // Create a minimal notification stub

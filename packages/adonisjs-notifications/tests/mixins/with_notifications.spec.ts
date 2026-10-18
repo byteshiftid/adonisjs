@@ -156,7 +156,7 @@ test.group('withNotifications mixin', () => {
       assert.equal(whereCalls[0].column, 'notifiable_type')
       assert.equal(whereCalls[0].value, 'test_models')
       assert.equal(whereCalls[1].column, 'notifiable_id')
-      assert.equal(whereCalls[1].value, 3)
+      assert.equal(whereCalls[1].value, '3')
       assert.lengthOf(whereNullCalls, 1)
       assert.equal(whereNullCalls[0].column, 'read_at')
       assert.lengthOf(updateCalls, 1)

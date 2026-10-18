@@ -127,7 +127,7 @@ test.group('NotificationManager - Queue Dispatch', () => {
     assert.equal(payloads[0].notificationType, 'QueuedNotification')
     assert.equal(payloads[0].channel, 'mail')
     assert.equal(payloads[0].notifiableType, 'Object')
-    assert.equal(payloads[0].notifiableId, 1)
+    assert.equal(payloads[0].notifiableId, '1')
     assert.exists(payloads[0].dedupeKey)
     assert.lengthOf(mockChannel.calls, 0)
   })

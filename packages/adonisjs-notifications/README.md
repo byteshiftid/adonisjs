@@ -107,7 +107,7 @@ await user.notify(new OrderShippedNotification(order))
 
 - **Multi-channel delivery** — Send through mail, database (inbox), log, or null channels from a single notification class.
 - **Queue support** — Queue any notification channel with `shouldQueue = true`, per-notification queue names, and per-channel delays. No delivery code needed.
-- **Database inbox** — Persist notifications and query them directly on the notifiable model with `user.notifications()` and `user.unreadNotifications()`.
+- **Database inbox** — Persist notifications and query them directly on the notifiable model with `user.notifications()` and `user.unreadNotifications()`. Rows are matched by `notifiable_type` (`getNotificationType()`, then the model table) and a string `notifiable_id`. Rows written by earlier versions with the class name (for example `User`) stay invisible until you run `UPDATE notifications SET notifiable_type = 'users' WHERE notifiable_type = 'User'` and the same for `notification_deliveries`, using your model's table name. See [Database Notifications](docs/guides/database-notifications.md#how-inbox-rows-are-matched).
 - **Test fakes** — Swap the real manager for a fake that records every notification and exposes rich assertions. No network calls during tests.
 - **Laravel-style API** — Designed to feel familiar: `via()`, `toMail()`, `shouldSend()`, `MailMessage.create()`, `.subject()`, `.line()`, `.action()`.
 - **Routing** — Declarative route resolution with fallback strategies, anonymous route notifications, and per-notification overrides.

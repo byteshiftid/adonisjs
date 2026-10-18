@@ -20,6 +20,39 @@ export default class User extends compose(BaseModel, withNotifications()) {
 }
 ```
 
+### How inbox rows are matched
+
+Every row stores the recipient as `notifiable_type` and `notifiable_id`. Both the write path and the
+inbox queries (`user.notifications()`, `unreadNotificationsCount()`, `markNotificationsAsRead()`,
+the dashboard, and metrics) derive them the same way:
+
+- `notifiable_type` is `getNotificationType()` when the model defines it, otherwise the model's
+  table (`users`), otherwise the class name.
+- `notifiable_id` is always stored as a string, so `1` and `'1'` refer to the same recipient.
+
+```ts
+export default class User extends compose(BaseModel, withNotifications()) {
+  static table = 'users'
+
+  // Optional. Keeps working unchanged; it returns the same value as the table default.
+  getNotificationType() {
+    return User.table
+  }
+}
+```
+
+**Upgrading from versions before this change:** earlier versions stored the class name (for example
+`User`) as `notifiable_type`, so those rows stay invisible to the inbox. Rewrite them once, using the
+table name your model resolves to:
+
+```sql
+UPDATE notifications SET notifiable_type = 'users' WHERE notifiable_type = 'User';
+UPDATE notification_deliveries SET notifiable_type = 'users' WHERE notifiable_type = 'User';
+```
+
+Apps that already return a custom type from `getNotificationType()` only need to run the update when
+their stored rows were written with the class name.
+
 ## Sending to database
 
 ```ts

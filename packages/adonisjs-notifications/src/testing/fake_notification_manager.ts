@@ -2,7 +2,11 @@ import { AssertionError } from 'node:assert'
 import type { Notification } from '../notification.ts'
 import type { NotificationManager } from '../notification_manager.ts'
 import type { RecordedNotification, FakeOptions } from '../contracts/testing.ts'
-import { normalizeRecipients } from '../utils/notifiable_resolver.ts'
+import {
+  normalizeRecipients,
+  resolveNotifiableId,
+  resolveNotifiableType,
+} from '../utils/notifiable_resolver.ts'
 import { resolveChannelMessage } from '../utils/channel_resolver.ts'
 import { FakeNotificationRouter } from './fake_notification_router.ts'
 
@@ -290,39 +294,17 @@ export class FakeNotificationManager {
   // --- Helpers ---
 
   #notifiableMatches(recorded: RecordedNotification, expected: unknown): boolean {
-    const original = recorded.notifiable.original
-    if (original === expected) return true
-    if (typeof expected === 'object' && expected !== null) {
-      const obj = expected as Record<string, unknown>
-      const getId = obj.getNotificationId
-      if (typeof getId === 'function') {
-        const id = (getId as () => string | number).call(expected)
-        const getType = obj.getNotificationType
-        const type =
-          typeof getType === 'function'
-            ? (getType as () => string).call(expected)
-            : obj.constructor?.name
-        return recorded.notifiable.id === id && recorded.notifiable.type === type
-      }
-      if ('id' in obj && recorded.notifiable.id === obj.id) return true
-    }
-    return false
+    if (recorded.notifiable.original === expected) return true
+    if (typeof expected !== 'object' || expected === null) return false
+
+    return (
+      recorded.notifiable.type === resolveNotifiableType(expected) &&
+      recorded.notifiable.id === resolveNotifiableId(expected)
+    )
   }
 
   #describeNotifiable(notifiable: unknown): string {
-    if (notifiable === null || notifiable === undefined) return String(notifiable)
-    if (typeof notifiable === 'object') {
-      const obj = notifiable as Record<string, unknown>
-      const getId = obj.getNotificationId
-      const id =
-        typeof getId === 'function' ? (getId as () => string | number).call(notifiable) : obj.id
-      const getType = obj.getNotificationType
-      const type =
-        typeof getType === 'function'
-          ? (getType as () => string).call(notifiable)
-          : (obj.constructor?.name ?? 'object')
-      return `${type}(${id})`
-    }
-    return String(notifiable)
+    if (typeof notifiable !== 'object' || notifiable === null) return String(notifiable)
+    return `${resolveNotifiableType(notifiable)}(${resolveNotifiableId(notifiable) ?? '0'})`
   }
 }

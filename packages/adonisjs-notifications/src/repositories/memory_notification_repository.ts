@@ -28,7 +28,7 @@ export class MemoryNotificationRepository implements NotificationRepository {
       id,
       type: notification.type,
       notifiableType: notification.notifiableType,
-      notifiableId: notification.notifiableId,
+      notifiableId: String(notification.notifiableId),
       data: notification.data,
       metadata: notification.metadata ?? null,
       readAt: null,
@@ -57,7 +57,7 @@ export class MemoryNotificationRepository implements NotificationRepository {
     options?: ListOptions
   ): Promise<DatabaseNotificationRow[]> {
     let results = Array.from(this.notifications.values()).filter(
-      (n) => n.notifiableType === notifiableType && n.notifiableId === notifiableId
+      (n) => n.notifiableType === notifiableType && n.notifiableId === String(notifiableId)
     )
 
     // Filter unread only
@@ -109,7 +109,7 @@ export class MemoryNotificationRepository implements NotificationRepository {
     for (const notification of this.notifications.values()) {
       if (
         notification.notifiableType === notifiableType &&
-        notification.notifiableId === notifiableId &&
+        notification.notifiableId === String(notifiableId) &&
         notification.readAt === null
       ) {
         notification.readAt = now
@@ -137,7 +137,7 @@ export class MemoryNotificationRepository implements NotificationRepository {
     for (const notification of this.notifications.values()) {
       if (
         notification.notifiableType === notifiableType &&
-        notification.notifiableId === notifiableId &&
+        notification.notifiableId === String(notifiableId) &&
         notification.readAt === null
       ) {
         count++
@@ -158,7 +158,7 @@ export class MemoryNotificationRepository implements NotificationRepository {
       notificationId: delivery.notificationId ?? null,
       notificationType: delivery.notificationType,
       notifiableType: delivery.notifiableType,
-      notifiableId: delivery.notifiableId,
+      notifiableId: String(delivery.notifiableId),
       channel: delivery.channel,
       status: delivery.status,
       attempts: delivery.attempts ?? 1,
@@ -279,7 +279,7 @@ export class MemoryNotificationRepository implements NotificationRepository {
     notifiableId: string | number
   ): Promise<import('../contracts/metrics.ts').InboxMetrics> {
     const notifications = Array.from(this.notifications.values()).filter(
-      (n) => n.notifiableType === notifiableType && n.notifiableId === notifiableId
+      (n) => n.notifiableType === notifiableType && n.notifiableId === String(notifiableId)
     )
 
     const total = notifications.length
@@ -307,7 +307,7 @@ export class MemoryNotificationRepository implements NotificationRepository {
       deliveries = deliveries.filter((d) => d.notifiableType === filter.notifiableType)
     }
     if (filter?.notifiableId !== undefined) {
-      deliveries = deliveries.filter((d) => d.notifiableId === filter.notifiableId)
+      deliveries = deliveries.filter((d) => d.notifiableId === String(filter.notifiableId))
     }
     if (filter?.channel) {
       deliveries = deliveries.filter((d) => d.channel === filter.channel)
