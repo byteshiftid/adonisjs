@@ -1,0 +1,111 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  checks:
+    name: format, lint, typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      # The playground type-checks against the packages' build output.
+      - run: pnpm build
+      - run: pnpm lint
+      - run: pnpm typecheck
+
+  test:
+    name: package tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+
+  audit-trail-databases:
+    name: audit-trail SQLite/PostgreSQL/MySQL (run ${{ matrix.repetition }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        repetition: [1, 2, 3]
+    env:
+      RUN_DOCKER_TESTS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @byteshiftid/adonisjs-audit-trail run quick:test
+
+  packaging:
+    name: packed artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: audit-trail exports resolve
+        run: pnpm --filter @byteshiftid/adonisjs-audit-trail run verify:exports
+      - name: audit-trail configure in a fresh AdonisJS app
+        run: pnpm --filter @byteshiftid/adonisjs-audit-trail run e2e:consumer
+      - name: tenant packed artifact in a consumer app
+        working-directory: packages/adonisjs-tenant
+        run: node scripts/verify-packed-artifact.mjs
+      - name: notifications installs with every optional peer
+        run: |
+          cd packages/adonisjs-notifications
+          tarball="$(npm pack --pack-destination "$RUNNER_TEMP" --json | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>console.log(JSON.parse(d)[0].filename))')"
+          mkdir "$RUNNER_TEMP/consumer"
+          cd "$RUNNER_TEMP/consumer"
+          npm init --yes > /dev/null
+          npm install "$RUNNER_TEMP/$tarball" @adonisjs/core@^7.0.0 @adonisjs/mail@^10.0.0 @adonisjs/queue@~0.6.2
+          npm ls @byteshiftid/adonisjs-notifications @adonisjs/core @adonisjs/mail @adonisjs/queue
+
+  playground:
+    name: playground integration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm --filter @byteshiftid/playground test
