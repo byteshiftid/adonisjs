@@ -13,6 +13,12 @@ export default class DatabaseNotification extends BaseModel {
   static table = 'notifications'
 
   /**
+   * The UUID primary key is assigned in code before insert. Without this flag Lucid replaces
+   * it with the insert result, which is the rowid on SQLite, so later updates match no row.
+   */
+  static selfAssignPrimaryKey = true
+
+  /**
    * Primary key is a UUID.
    */
   @column({ isPrimary: true })

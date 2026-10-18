@@ -426,9 +426,11 @@ export class NotificationManager {
         const result = await channel.send(context)
         // Success: update delivery record
         if (deliveryRecord) {
+          const linkedNotificationId = result.metadata?.notificationId
           await this.repository!.updateDeliveryStatus(deliveryRecord.id, 'sent', {
             attempts: attempt,
             providerMessageId: result.providerMessageId ?? null,
+            notificationId: typeof linkedNotificationId === 'string' ? linkedNotificationId : null,
           })
         }
         // Emit sent event

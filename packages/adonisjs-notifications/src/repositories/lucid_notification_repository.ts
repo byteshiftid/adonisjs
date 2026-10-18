@@ -191,7 +191,7 @@ export class LucidNotificationRepository implements NotificationRepository {
     const Model = await this.getDeliveryModel()
     const now = DateTime.now()
 
-    const updateData: Record<string, any> = {
+    const updateData: Record<string, unknown> = {
       status,
       updated_at: now.toSQL(),
     }
@@ -203,11 +203,15 @@ export class LucidNotificationRepository implements NotificationRepository {
     }
 
     if (data) {
+      if (data.notificationId !== undefined) {
+        updateData.notification_id = data.notificationId
+      }
       if (data.providerMessageId !== undefined) {
         updateData.provider_message_id = data.providerMessageId
       }
       if (data.error !== undefined) {
-        updateData.error = data.error
+        // Query-builder updates bypass the model's `prepare`, so the JSON column is encoded here.
+        updateData.error = data.error === null ? null : JSON.stringify(data.error)
       }
       if (data.attempts !== undefined) {
         updateData.attempts = data.attempts
