@@ -1,3 +1,4 @@
+import { basename, dirname } from 'node:path'
 import { AppFactory } from '@adonisjs/core/factories/app'
 import { test } from '@japa/runner'
 import { configure } from '../configure.js'
@@ -39,14 +40,13 @@ test.group('Configure hook', () => {
     const deliveries = rendered.get('migrations/create_notification_deliveries_table.stub')
 
     assert.include(notifications?.contents, "protected tableName = 'notifications'")
-    assert.match(
-      notifications!.destination,
-      /database\/migrations\/\d+_create_notifications_table\.ts$/
-    )
+    assert.equal(dirname(notifications!.destination), app.makePath('database', 'migrations'))
+    assert.match(basename(notifications!.destination), /^\d+_create_notifications_table\.ts$/)
     assert.include(deliveries?.contents, "protected tableName = 'notification_deliveries'")
+    assert.equal(dirname(deliveries!.destination), app.makePath('database', 'migrations'))
     assert.match(
-      deliveries!.destination,
-      /database\/migrations\/\d+_create_notification_deliveries_table\.ts$/
+      basename(deliveries!.destination),
+      /^\d+_create_notification_deliveries_table\.ts$/
     )
     assert.equal(
       rendered.get('config/notifications.stub')?.destination,
