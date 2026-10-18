@@ -1,0 +1,5 @@
+build
+docs
+coverage
+*.html
+src/ui/dashboard/spa

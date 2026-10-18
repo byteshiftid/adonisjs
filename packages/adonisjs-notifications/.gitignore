@@ -1,0 +1,13 @@
+node_modules
+coverage
+.DS_STORE
+.idea
+.vscode/
+*.log
+build
+dist
+package-lock.json
+
+codedb.snapshot
+!src/ui/dashboard/spa/dist
+!src/ui/dashboard/spa/dist/index.html

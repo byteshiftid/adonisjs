@@ -1,0 +1,217 @@
+{
+  "name": "@rikology/adonisjs-notifications",
+  "description": "Send notifications through multiple channels with Laravel-inspired ergonomics for AdonisJS v7",
+  "version": "1.5.2",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "type": "module",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "files": [
+    "build",
+    "src/ui/dashboard/spa/dist/index.html",
+    "!build/bin",
+    "!build/tests"
+  ],
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    },
+    "./types": {
+      "types": "./build/src/types.d.ts",
+      "default": "./build/src/types.js"
+    },
+    "./services/main": {
+      "types": "./build/services/main.d.ts",
+      "default": "./build/services/main.js"
+    },
+    "./notification_provider": {
+      "types": "./build/providers/notification_provider.d.ts",
+      "default": "./build/providers/notification_provider.js"
+    },
+    "./commands": {
+      "types": "./build/commands/main.d.ts",
+      "default": "./build/commands/main.js"
+    },
+    "./commands/*": {
+      "types": "./build/commands/*.d.ts",
+      "default": "./build/commands/*.js"
+    },
+    "./mixins": {
+      "types": "./build/src/mixins/main.d.ts",
+      "default": "./build/src/mixins/main.js"
+    },
+    "./testing": {
+      "types": "./build/src/testing/main.d.ts",
+      "default": "./build/src/testing/main.js"
+    },
+    "./channels/*": {
+      "types": "./build/src/channels/*.d.ts",
+      "default": "./build/src/channels/*.js"
+    },
+    "./jobs/*": {
+      "types": "./build/src/jobs/*.d.ts",
+      "default": "./build/src/jobs/*.js"
+    },
+    "./ui/dashboard": {
+      "types": "./build/src/ui/dashboard/index.d.ts",
+      "default": "./build/src/ui/dashboard/index.js"
+    }
+  },
+  "scripts": {
+    "copy:templates": "copyfiles \"stubs/**/*.stub\" build",
+    "copy:commands": "copyfiles \"commands/commands.json\" build",
+    "copy:ui": "copyfiles -u 5 \"src/ui/dashboard/spa/dist/index.html\" \"build/src/ui/dashboard/spa/dist/\"",
+    "generate:commands": "node --import=@poppinss/ts-exec scripts/generate_commands_manifest.ts",
+    "build:ui": "cd src/ui/dashboard/spa && npm install && npm run build",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "quick:test": "node --import=@poppinss/ts-exec --enable-source-maps bin/test.ts",
+    "pretest": "npm run lint",
+    "test": "c8 npm run quick:test",
+    "precompile": "npm run lint",
+    "compile": "tsdown && tsc --emitDeclarationOnly --declaration",
+    "postcompile": "npm run generate:commands && npm run copy:commands && npm run copy:templates && npm run copy:ui",
+    "build": "npm run compile",
+    "release": "release-it",
+    "version": "npm run build",
+    "prepublishOnly": "npm run build"
+  },
+  "documentation": "https://github.com/rikoriswandha/adonisjs-notifications#readme",
+  "keywords": [
+    "adonisjs",
+    "adonisjs-package",
+    "notifications",
+    "mail",
+    "database",
+    "queue",
+    "channels",
+    "laravel-notifications",
+    "test-fakes",
+    "inbox",
+    "messaging"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@adonisjs/assembler": "^8.0.0",
+    "@adonisjs/core": "^7.0.1",
+    "@adonisjs/eslint-config": "^3.0.0",
+    "@adonisjs/lucid": "^22.4.2",
+    "@adonisjs/mail": "^10.0.0",
+    "@adonisjs/prettier-config": "^1.4.5",
+    "@adonisjs/tsconfig": "^2.0.0",
+    "@japa/api-client": "^3.2.1",
+    "@japa/assert": "^4.2.0",
+    "@japa/runner": "^5.3.0",
+    "@poppinss/ts-exec": "^1.4.4",
+    "@release-it/conventional-changelog": "^12.0.0",
+    "@types/luxon": "^3.7.1",
+    "@types/node": "^25.3.5",
+    "c8": "^11.0.0",
+    "copyfiles": "^2.4.1",
+    "cross-env": "^10.1.0",
+    "eslint": "^10.0.3",
+    "luxon": "^3.7.2",
+    "prettier": "^3.8.1",
+    "release-it": "^21.0.2",
+    "tsdown": "^0.21.0",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "@adonisjs/assembler": "^8.0.0",
+    "@adonisjs/core": "^7.0.0",
+    "@adonisjs/lucid": "^22.0.0",
+    "@adonisjs/mail": "^10.0.0",
+    "@adonisjs/queue": "^0.6.2"
+  },
+  "peerDependenciesMeta": {
+    "@adonisjs/assembler": {
+      "optional": true
+    },
+    "@adonisjs/mail": {
+      "optional": true
+    },
+    "@adonisjs/lucid": {
+      "optional": true
+    },
+    "@adonisjs/queue": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "tsdown": {
+    "entry": [
+      "./index.ts",
+      "./configure.ts",
+      "./services/main.ts",
+      "./providers/notification_provider.ts",
+      "./src/types.ts",
+      "./src/channels/index.ts",
+      "./src/channels/database_channel.ts",
+      "./src/channels/log_channel.ts",
+      "./src/channels/mail_channel.ts",
+      "./src/channels/null_channel.ts",
+      "./src/mixins/main.ts",
+      "./src/jobs/send_notification_job.ts",
+      "./src/testing/main.ts",
+      "./commands/main.ts",
+      "./commands/make_notification.ts",
+      "./src/ui/dashboard/index.ts",
+      "./commands/notifications_prune.ts",
+      "./commands/notifications_retry_failed.ts"
+    ],
+    "outDir": "./build",
+    "clean": true,
+    "format": "esm",
+    "minify": "dce-only",
+    "fixedExtension": false,
+    "dts": false,
+    "treeshake": false,
+    "sourcemaps": false,
+    "target": "esnext",
+    "deps": {
+      "neverBundle": [
+        "@rikology/adonisjs-notifications/services/main"
+      ]
+    }
+  },
+  "release-it": {
+    "git": {
+      "requireCleanWorkingDir": true,
+      "requireUpstream": true,
+      "commitMessage": "chore(release): ${version}",
+      "tagAnnotation": "v${version}",
+      "push": true,
+      "tagName": "v${version}"
+    },
+    "github": {
+      "release": true
+    },
+    "npm": {
+      "publish": true,
+      "skipChecks": true
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": {
+          "name": "angular"
+        }
+      }
+    }
+  },
+  "c8": {
+    "reporter": [
+      "text",
+      "html"
+    ],
+    "exclude": [
+      "tests/**"
+    ]
+  },
+  "prettier": "@adonisjs/prettier-config"
+}
