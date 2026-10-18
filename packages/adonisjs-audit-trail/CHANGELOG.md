@@ -28,6 +28,12 @@ This project adheres to [Semantic Versioning](https://semver.org/) and uses [Con
 * **outbox:** enforce atomic intent delivery ([b621183](https://github.com/rikoriswandha/adonisjs-audit-trail/commit/b621183a0d3dbb59f881dff140c0275b18857473))
 * **release:** persist generated changelog ([2220e49](https://github.com/rikoriswandha/adonisjs-audit-trail/commit/2220e492e73171cdeefe19da04698cf045e226fd))
 
+## 1.3.0
+
+### Minor Changes
+
+- c721db5: Publish under the `@byteshiftid` scope. The package was previously `@rikology/adonisjs-audit-trail`; replace the dependency and every import path (`@rikology/adonisjs-audit-trail/...` → `@byteshiftid/adonisjs-audit-trail/...`), including the provider and commands entries in `adonisrc.ts`. Database tables and stored hashes are unchanged.
+
 ## 1.2.0 - 2026-07-15
 
 ### Added

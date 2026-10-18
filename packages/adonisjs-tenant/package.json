@@ -1,7 +1,7 @@
 {
   "name": "@byteshiftid/adonisjs-tenant",
   "description": "Multitenancy library for AdonisJS v7 — tenant-aware auth + ORM scoping",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "engines": {
     "node": ">=24.0.0"
   },

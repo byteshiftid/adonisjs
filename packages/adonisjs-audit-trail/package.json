@@ -1,7 +1,7 @@
 {
   "name": "@byteshiftid/adonisjs-audit-trail",
   "description": "Production-grade, tamper-evident audit trail for AdonisJS v7",
-  "version": "1.2.4",
+  "version": "1.3.0",
   "homepage": "https://github.com/byteshiftid/adonisjs/tree/main/packages/adonisjs-audit-trail#readme",
   "repository": {
     "type": "git",
