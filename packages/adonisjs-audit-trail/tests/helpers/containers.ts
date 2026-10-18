@@ -1,4 +1,4 @@
-import { GenericContainer, type StartedTestContainer } from 'testcontainers'
+import { GenericContainer, Wait, type StartedTestContainer } from 'testcontainers'
 import { isDialectEnabled, type DbDialect } from './dialect.js'
 
 export type { DbDialect } from './dialect.js'
@@ -58,6 +58,14 @@ async function startPostgres(): Promise<ContainerHandle> {
       POSTGRES_DB: 'audit',
     })
     .withExposedPorts(5432)
+    // The image runs a temporary server during initdb, then restarts. Connecting before the
+    // second "ready" line fails with "the database system is starting up".
+    .withWaitStrategy(
+      Wait.forAll([
+        Wait.forListeningPorts(),
+        Wait.forLogMessage(/database system is ready to accept connections/, 2),
+      ])
+    )
     .withStartupTimeout(120_000)
     .start()
 
@@ -83,6 +91,13 @@ async function startMysql(): Promise<ContainerHandle> {
     })
     .withCommand(['--log-bin-trust-function-creators=1'])
     .withExposedPorts(3306)
+    // The init server listens on port 0; only the final server reports port 3306.
+    .withWaitStrategy(
+      Wait.forAll([
+        Wait.forListeningPorts(),
+        Wait.forLogMessage(/ready for connections.*port: 3306/),
+      ])
+    )
     .withStartupTimeout(120_000)
     .start()
 
