@@ -1,0 +1,63 @@
+{{{
+  exports({ to: app.configPath('tenancy.ts') })
+}}}
+import { defineTenancyConfig } from '@rikology/adonisjs-tenant'
+
+const tenancyConfig = defineTenancyConfig({
+  /**
+   * The default tenant resolver strategy.
+   * Available strategies: 'subdomain' | 'header' | 'jwt' | 'path'
+   */
+  default: 'subdomain',
+
+  /**
+   * Return a 404 when a request does not resolve to a tenant.
+   * @default true
+   */
+  failOnMissing: true,
+
+  /**
+   * Configured tenant resolver strategies.
+   * Each key is a strategy name that maps to a resolver type and options.
+   */
+  tenants: {
+    subdomain: {
+      resolver: 'subdomain',
+      options: {
+        /**
+         * Map of subdomain → tenant identity.
+         * The subdomain is extracted from the request hostname and looked up here.
+         *
+         * @example
+         * {
+         *   tenantA: { id: 1, name: 'Tenant A', slug: 'tenant-a' },
+         *   tenantB: { id: 2, name: 'Tenant B', slug: 'tenant-b' },
+         * }
+         */
+        tenants: {},
+
+        /**
+         * Number of subdomain levels to extract.
+         * For "tenant-a.example.com", level 1 extracts "tenant-a".
+         * @default 1
+         */
+        levels: 1,
+      },
+    },
+
+    header: {
+      resolver: 'header',
+      options: {
+        /**
+         * The HTTP header name to read the tenant identifier from.
+         * Configure the allowlist below or replace it with a lookup callback.
+         * Headers identify tenants; authorize the requesting user separately.
+         */
+        header: 'X-Tenant-ID',
+        tenants: {},
+      },
+    },
+  },
+})
+
+export default tenancyConfig

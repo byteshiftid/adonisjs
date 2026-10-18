@@ -1,0 +1,24 @@
+{{{
+  exports({
+    to: app.makePath(migration.folder, migration.fileName)
+  })
+}}}
+import { BaseSchema } from '@adonisjs/lucid/schema'
+
+export default class extends BaseSchema {
+  protected tableName = 'auth_access_tokens'
+
+  async up() {
+    this.schema.alterTable(this.tableName, (table) => {
+      // Existing rows have no tenant binding. Backfill them deliberately before
+      // adding a separate NOT NULL constraint migration.
+      table.string('tenant_id').nullable().index()
+    })
+  }
+
+  async down() {
+    this.schema.alterTable(this.tableName, (table) => {
+      table.dropColumn('tenant_id')
+    })
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "name": "@rikology/adonisjs-tenant",
+  "description": "Multitenancy library for AdonisJS v7 — tenant-aware auth + ORM scoping",
+  "version": "1.0.2",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "build",
+    "!build/bin",
+    "!build/tests"
+  ],
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    },
+    "./configure": {
+      "types": "./build/configure.d.ts",
+      "default": "./build/configure.js"
+    },
+    "./types": {
+      "types": "./build/src/types.d.ts",
+      "default": "./build/src/types.js"
+    },
+    "./database": {
+      "types": "./build/src/tenant_database_executor.d.ts",
+      "default": "./build/src/tenant_database_executor.js"
+    },
+    "./middleware": {
+      "types": "./build/src/middleware/tenant_middleware.d.ts",
+      "default": "./build/src/middleware/tenant_middleware.js"
+    },
+    "./guards": {
+      "types": "./build/src/guards/define_config.d.ts",
+      "default": "./build/src/guards/define_config.js"
+    },
+    "./mixins": {
+      "types": "./build/src/mixins/index.d.ts",
+      "default": "./build/src/mixins/index.js"
+    },
+    "./resolvers": {
+      "types": "./build/src/resolvers/index.d.ts",
+      "default": "./build/src/resolvers/index.js"
+    },
+    "./extensions": {
+      "types": "./build/src/extensions/authenticator.d.ts",
+      "default": "./build/src/extensions/authenticator.js"
+    },
+    "./user_providers": {
+      "types": "./build/src/user_providers/tenant_user_provider.d.ts",
+      "default": "./build/src/user_providers/tenant_user_provider.js"
+    },
+    "./providers/tenancy_provider": {
+      "types": "./build/providers/tenancy_provider.d.ts",
+      "default": "./build/providers/tenancy_provider.js"
+    }
+  },
+  "scripts": {
+    "copy:templates": "copyfiles \"stubs/**/*.stub\" build --up=1",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "quick:test": "node --import=@poppinss/ts-exec --enable-source-maps bin/test.ts",
+    "pretest": "npm run lint",
+    "test": "c8 npm run quick:test",
+    "precompile": "npm run lint",
+    "compile": "tsdown && tsc --emitDeclarationOnly --declaration",
+    "postcompile": "npm run copy:templates",
+    "build": "npm run compile",
+    "verify:package": "npm run build && node scripts/verify-packed-artifact.mjs",
+    "release": "release-it",
+    "version": "npm run build",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "adonisjs",
+    "multitenancy",
+    "tenant",
+    "multi-tenant",
+    "saas"
+  ],
+  "author": "Riko Riswandha Fahmi Prasetyo <rikorisw@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rikoriswandha/adonisjs-tenant.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rikoriswandha/adonisjs-tenant/issues"
+  },
+  "homepage": "https://github.com/rikoriswandha/adonisjs-tenant#readme",
+  "devDependencies": {
+    "@adonisjs/assembler": "^8.0.0",
+    "@adonisjs/auth": "^10.0.0",
+    "@adonisjs/core": "^7.0.1",
+    "@adonisjs/eslint-config": "^3.0.0",
+    "@adonisjs/lucid": "^22.0.0",
+    "@adonisjs/prettier-config": "^1.5.0",
+    "@adonisjs/tsconfig": "^2.0.0",
+    "@japa/assert": "^4.2.0",
+    "@japa/runner": "^5.3.0",
+    "@poppinss/ts-exec": "^1.4.4",
+    "@release-it/conventional-changelog": "^12.0.0",
+    "@types/node": "^25.3.5",
+    "c8": "^11.0.0",
+    "copyfiles": "^2.4.1",
+    "cross-env": "^10.1.0",
+    "eslint": "^10.0.3",
+    "luxon": "^3.7.2",
+    "prettier": "^3.8.1",
+    "release-it": "^21.0.2",
+    "sqlite3": "^6.0.1",
+    "tsdown": "^0.21.0",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "@adonisjs/assembler": "^8.0.0",
+    "@adonisjs/auth": "^10.0.0",
+    "@adonisjs/core": "^7.0.0",
+    "@adonisjs/lucid": "^22.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@adonisjs/assembler": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": false
+  },
+  "tsdown": {
+    "entry": {
+      "index": "./index.ts",
+      "configure": "./configure.ts",
+      "src/types": "./src/types.ts",
+      "src/middleware/tenant_middleware": "./src/middleware/tenant_middleware.ts",
+      "src/guards/define_config": "./src/guards/define_config.ts",
+      "src/mixins/index": "./src/mixins/index.ts",
+      "src/resolvers/index": "./src/resolvers/index.ts",
+      "src/extensions/authenticator": "./src/extensions/authenticator.ts",
+      "src/user_providers/tenant_user_provider": "./src/user_providers/tenant_user_provider.ts",
+      "providers/tenancy_provider": "./providers/tenancy_provider.ts",
+      "src/tenant_database_executor": "./src/tenant_database_executor.ts"
+    },
+    "outDir": "./build",
+    "clean": true,
+    "format": "esm",
+    "minify": "dce-only",
+    "fixedExtension": false,
+    "dts": false,
+    "treeshake": false,
+    "sourcemaps": false,
+    "target": "esnext"
+  },
+  "release-it": {
+    "git": {
+      "requireCleanWorkingDir": true,
+      "requireUpstream": true,
+      "commitMessage": "chore(release): ${version}",
+      "tagAnnotation": "v${version}",
+      "push": true,
+      "tagName": "v${version}"
+    },
+    "github": {
+      "release": true
+    },
+    "npm": {
+      "publish": true,
+      "skipChecks": true
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": {
+          "name": "angular"
+        }
+      }
+    }
+  },
+  "c8": {
+    "reporter": [
+      "text",
+      "html"
+    ],
+    "exclude": [
+      "tests/**"
+    ],
+    "check-coverage": true,
+    "branches": 80,
+    "functions": 80,
+    "lines": 80,
+    "statements": 80
+  },
+  "prettier": "@adonisjs/prettier-config"
+}

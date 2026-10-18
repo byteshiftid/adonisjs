@@ -1,0 +1,10 @@
+node_modules
+coverage
+.DS_STORE
+.idea
+.vscode/
+*.log
+build
+dist
+.sisyphus/
+codedb.snapshot
