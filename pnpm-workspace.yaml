@@ -26,6 +26,9 @@ catalog:
   luxon: ^3.7.2
   prettier: ^3.8.1
   tsdown: ^0.21.0
+  # 12.x ships prebuilt binaries for Node 24 on Windows; 13.x falls back to node-gyp there.
+  better-sqlite3: ^12.10.0
+  '@types/better-sqlite3': ^7.6.13
   typescript: ^5.9.3
 
 onlyBuiltDependencies:
