@@ -28,6 +28,8 @@ pnpm build
 
 Package `test` and `build` scripts run lint first. Coverage thresholds live in each package's `c8` config.
 
+The playground installs injected copies of the packages (`injectWorkspacePackages` in `pnpm-workspace.yaml`), so it resolves `@adonisjs/core` and `@adonisjs/lucid` exactly like an app installed from npm. After changing a package, run `pnpm build` at the root (or `pnpm install`) so the playground picks up the new build.
+
 ## Changesets
 
 Every pull request that changes a published package needs a changeset:

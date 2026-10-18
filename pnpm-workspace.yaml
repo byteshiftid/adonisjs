@@ -32,3 +32,10 @@ onlyBuiltDependencies:
   - better-sqlite3
   - esbuild
   - sqlite3
+
+# The playground consumes the packages like an installed app: injected copies resolve their
+# peers (@adonisjs/core, @adonisjs/lucid) from the playground, so a process has one Lucid
+# instance. Rebuilding a package re-syncs the copies.
+injectWorkspacePackages: true
+syncInjectedDepsAfterScripts:
+  - build

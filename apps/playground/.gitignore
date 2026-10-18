@@ -1,0 +1,33 @@
+# Dependencies and AdonisJS build
+node_modules
+build
+!tmp
+tmp/*
+!tmp/.gitkeep
+
+# Secrets
+.env
+.env.local
+.env.production.local
+.env.development.local
+.env.*.local
+
+# Test defaults are committed so `node ace test` runs from a clean checkout.
+# The repo root ignores `.env.*`; these negations are scoped to this app.
+!.env.test
+!.env.example
+
+# Frontend assets compiled code
+public/assets
+
+# Build tools specific
+npm-debug.log
+yarn-error.log
+
+# Editors specific
+.fleet
+.idea
+.vscode
+
+# Platform specific
+.DS_Store

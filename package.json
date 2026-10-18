@@ -7,10 +7,10 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "build": "pnpm --filter \"./packages/*\" run build",
+    "build": "pnpm --filter \"@byteshiftid/adonisjs-*\" run build",
     "lint": "pnpm -r run lint",
     "typecheck": "pnpm -r run typecheck",
-    "test": "pnpm --filter \"./packages/*\" run test",
+    "test": "pnpm --filter \"@byteshiftid/adonisjs-*\" run test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "changeset": "changeset",

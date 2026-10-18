@@ -1,0 +1,203 @@
+import { BaseSchema } from '@adonisjs/lucid/schema'
+
+export default class extends BaseSchema {
+  protected tableName = 'audits'
+
+  async up() {
+    this.schema.createTable(this.tableName, (table) => {
+      table.uuid('id').primary()
+      table.string('stream', 64).notNullable()
+      table.bigInteger('seq').notNullable()
+      table.string('hash', 64).notNullable()
+      table.string('prev_hash', 64).notNullable()
+
+      table.string('event', 128).notNullable()
+      table.string('auditable_type', 128).nullable()
+      table.string('auditable_id', 64).nullable()
+      table.jsonb('old_values').nullable()
+      table.jsonb('new_values').nullable()
+      table.jsonb('metadata').nullable()
+
+      table.string('actor_type', 64).nullable()
+      table.string('actor_id', 64).nullable()
+      table.string('actor_label', 255).nullable()
+
+      table.string('tenant_id', 64).nullable()
+      table.string('request_id', 64).nullable()
+      table.string('correlation_id', 64).nullable()
+      table.string('ip_address', 45).nullable()
+      table.string('user_agent', 512).nullable()
+      table.string('url', 2048).nullable()
+      table.string('http_method', 10).nullable()
+      table.jsonb('tags').notNullable()
+
+      table.string('schema_version', 8).notNullable().defaultTo('1')
+      table.timestamp('created_at', { useTz: true, precision: 3 }).notNullable()
+
+      table.unique(['stream', 'seq'])
+      table.index(['auditable_type', 'auditable_id', 'seq'])
+      table.index(['actor_type', 'actor_id', 'seq'])
+      table.index(['event', 'created_at'])
+      table.index(['stream', 'seq'])
+      table.index(['tenant_id'])
+    })
+
+    this.schema.createTable('audit_archive_events', (table) => {
+      table.uuid('id').primary()
+      table.string('stream', 64).notNullable()
+      table.bigInteger('seq').notNullable()
+      table.string('hash', 64).notNullable()
+      table.string('prev_hash', 64).notNullable()
+      table.timestamp('created_at', { useTz: true, precision: 3 }).notNullable()
+
+      table.unique(['stream', 'seq'])
+      table.index(['stream', 'seq'])
+    })
+
+    this.schema.createTable('audit_chain_checkpoints', (table) => {
+      table.string('stream', 64).notNullable()
+      table.bigInteger('seq').notNullable()
+      table.string('hash', 64).notNullable()
+      table.timestamp('created_at', { useTz: true, precision: 3 }).notNullable()
+
+      table.unique(['stream', 'seq'])
+      table.index(['stream', 'seq'])
+    })
+
+    if (
+      this.db.dialect.name === 'sqlite3' ||
+      this.db.dialect.name === 'better-sqlite3' ||
+      this.db.dialect.name === 'libsql'
+    ) {
+      this.schema.createTable('audit_maintenance_guard', (table) => {
+        table.string('operation', 32).primary()
+      })
+    }
+
+    this.defer(async (db) => {
+      const immutableTables = [
+        { name: this.tableName, triggerPrefix: 'audits' },
+        { name: 'audit_archive_events', triggerPrefix: 'audit_archive_events' },
+      ]
+
+      if (db.dialect.name === 'postgres') {
+        await db.rawQuery(
+          'CREATE OR REPLACE FUNCTION prevent_audit_mutation() ' +
+            "RETURNS trigger AS 'BEGIN " +
+            "IF current_setting(''audit.maintenance'', true) = ''prune'' THEN " +
+            "IF TG_OP = ''DELETE'' THEN RETURN OLD; END IF; " +
+            'RETURN NEW; ' +
+            'END IF; ' +
+            "RAISE EXCEPTION ''audit rows are immutable''; " +
+            "END;' LANGUAGE plpgsql;"
+        )
+
+        for (const table of immutableTables) {
+          await db.rawQuery(
+            'CREATE TRIGGER ' +
+              table.triggerPrefix +
+              '_immutable BEFORE UPDATE OR DELETE ON ' +
+              table.name +
+              ' FOR EACH ROW EXECUTE FUNCTION prevent_audit_mutation();'
+          )
+        }
+        return
+      }
+
+      if (db.dialect.name === 'mysql') {
+        for (const table of immutableTables) {
+          await db.rawQuery(
+            'CREATE TRIGGER ' +
+              table.triggerPrefix +
+              '_before_update BEFORE UPDATE ON ' +
+              table.name +
+              ' FOR EACH ROW ' +
+              "BEGIN IF COALESCE(@audit_maintenance, '') <> 'prune' THEN " +
+              "SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'audit rows are immutable'; " +
+              'END IF; END'
+          )
+          await db.rawQuery(
+            'CREATE TRIGGER ' +
+              table.triggerPrefix +
+              '_before_delete BEFORE DELETE ON ' +
+              table.name +
+              ' FOR EACH ROW ' +
+              "BEGIN IF COALESCE(@audit_maintenance, '') <> 'prune' THEN " +
+              "SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'audit rows are immutable'; " +
+              'END IF; END'
+          )
+        }
+        return
+      }
+
+      if (
+        db.dialect.name === 'sqlite3' ||
+        db.dialect.name === 'better-sqlite3' ||
+        db.dialect.name === 'libsql'
+      ) {
+        for (const table of immutableTables) {
+          await db.rawQuery(
+            'CREATE TRIGGER ' +
+              table.triggerPrefix +
+              '_before_update BEFORE UPDATE ON ' +
+              table.name +
+              " WHEN NOT EXISTS (SELECT 1 FROM audit_maintenance_guard WHERE operation = 'prune') " +
+              "BEGIN SELECT RAISE(ABORT, 'audit rows are immutable'); END"
+          )
+          await db.rawQuery(
+            'CREATE TRIGGER ' +
+              table.triggerPrefix +
+              '_before_delete BEFORE DELETE ON ' +
+              table.name +
+              " WHEN NOT EXISTS (SELECT 1 FROM audit_maintenance_guard WHERE operation = 'prune') " +
+              "BEGIN SELECT RAISE(ABORT, 'audit rows are immutable'); END"
+          )
+        }
+      }
+    })
+  }
+
+  async down() {
+    this.defer(async (db) => {
+      if (db.dialect.name === 'postgres') {
+        await db.rawQuery('DROP TRIGGER IF EXISTS audits_immutable ON audits')
+        await db.rawQuery(
+          'DROP TRIGGER IF EXISTS audit_archive_events_immutable ON audit_archive_events'
+        )
+        await db.rawQuery('DROP FUNCTION IF EXISTS prevent_audit_mutation()')
+        return
+      }
+
+      if (db.dialect.name === 'mysql') {
+        await db.rawQuery('DROP TRIGGER IF EXISTS audits_before_update')
+        await db.rawQuery('DROP TRIGGER IF EXISTS audits_before_delete')
+        await db.rawQuery('DROP TRIGGER IF EXISTS audit_archive_events_before_update')
+        await db.rawQuery('DROP TRIGGER IF EXISTS audit_archive_events_before_delete')
+        return
+      }
+
+      if (
+        db.dialect.name === 'sqlite3' ||
+        db.dialect.name === 'better-sqlite3' ||
+        db.dialect.name === 'libsql'
+      ) {
+        await db.rawQuery('DROP TRIGGER IF EXISTS audits_before_update')
+        await db.rawQuery('DROP TRIGGER IF EXISTS audits_before_delete')
+        await db.rawQuery('DROP TRIGGER IF EXISTS audit_archive_events_before_update')
+        await db.rawQuery('DROP TRIGGER IF EXISTS audit_archive_events_before_delete')
+      }
+    })
+
+    this.schema.dropTable('audit_chain_checkpoints')
+    this.schema.dropTable('audit_archive_events')
+    this.schema.dropTable(this.tableName)
+
+    if (
+      this.db.dialect.name === 'sqlite3' ||
+      this.db.dialect.name === 'better-sqlite3' ||
+      this.db.dialect.name === 'libsql'
+    ) {
+      this.schema.dropTable('audit_maintenance_guard')
+    }
+  }
+}
