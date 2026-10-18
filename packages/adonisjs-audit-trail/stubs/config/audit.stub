@@ -1,0 +1,124 @@
+{{{
+  exports({
+    to: app.configPath('audit.ts')
+  })
+}}}
+import { defineConfig, stores } from '@rikology/adonisjs-audit-trail'
+
+export default defineConfig({
+  /**
+   * Default store used by the audit pipeline.
+   */
+  default: 'lucid',
+
+  /**
+   * Delivery guarantee mode.
+   * - 'best-effort': enqueue and flush asynchronously (default, fastest)
+   * - 'request-coupled': hold the response until the audit is durably written
+   * - 'transactional-outbox': write to an outbox table inside the business transaction
+   */
+  {{#if outbox}}
+  guarantee: 'transactional-outbox',
+  {{/if}}
+  {{#if !outbox}}
+  guarantee: 'best-effort',
+  {{/if}}
+
+  /**
+   * Configured stores. The lucid store requires @adonisjs/lucid.
+   */
+  stores: {
+    lucid: stores.lucid({
+      table: '{{ auditTable }}',
+      {{#if auditConnection}}
+      connection: '{{ auditConnection }}',
+      {{/if}}
+    }),
+  },
+
+  {{#if outbox}}
+  /**
+   * Source connection/table used for transactional outbox intent rows.
+   * The target audit store remains configured above.
+   */
+  outbox: {
+    table: '{{ outboxTable }}',
+    {{#if outboxConnection}}
+    connection: '{{ outboxConnection }}',
+    {{/if}}
+  },
+  {{/if}}
+
+  /**
+   * PII / sensitive field redaction.
+   */
+  redaction: {
+    global: ['password', 'passwordConfirmation', 'token', 'secret', '*.secret'],
+    mode: 'mask', // 'mask' | 'remove' | 'hash'
+    saltEnvVar: 'AUDIT_REDACTION_SALT',
+  },
+
+  /**
+   * Retention policies used by "node ace audit:prune".
+   */
+  retention: {
+    default: '730 days',
+    perEvent: {
+      'auth.login': '90 days',
+      'auth.login_failed': '30 days',
+    },
+    // archive: async (segment) => { /* push NDJSON to object storage */ },
+  },
+
+  /**
+   * Hash-chain configuration.
+   */
+  chain: {
+    {{#if multiTenant}}
+    streamBy: 'tenant',
+    {{/if}}
+    {{#if !multiTenant}}
+    streamBy: 'global',
+    {{/if}}
+  },
+
+  /**
+   * In-memory queue / flush settings.
+   */
+  queue: {
+    maxBatchSize: 200,
+    flushIntervalMs: 250,
+    capacity: 10_000,
+    overflow: 'dropOldest', // 'dropOldest' | 'dropNew' | 'block'
+  },
+
+  /**
+   * Max payload size for old/new values and metadata.
+   */
+  payloadMaxBytes: 32_768,
+
+  {{#if multiTenant}}
+  /**
+   * Resolve the tenant id from the HTTP context.
+   * Adjust this to match your tenancy strategy (subdomain, header, auth, etc.).
+   */
+  tenantResolver(ctx) {
+    return ctx.request.header('x-tenant-id') ?? null
+  },
+  {{/if}}
+
+  /**
+   * Automatically capture auth login/logout events.
+   * {{#if outbox}}
+   * Disabled in transactional-outbox mode because auth listener payloads do not
+   * include a caller-owned transaction. Capture these explicitly with
+   * audit.log('auth.login').withTransaction(trx).commit() instead.
+   * {{/if}}
+   */
+  {{#if outbox}}
+  captureAuthEvents: false,
+  {{/if}}
+  {{#if !outbox}}
+  captureAuthEvents: true,
+  {{/if}}
+})
